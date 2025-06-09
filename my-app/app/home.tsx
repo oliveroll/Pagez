@@ -41,16 +41,16 @@ const BookCard = ({ book, showProgress = false, size = 'medium' }) => {
         <Text style={styles.bookAuthor} numberOfLines={1}>{book.author}</Text>
         
         {showProgress && book.pageCount && (
-          <View style={styles.progressContainer}>
-            <View style={styles.progressBar}>
+        <View style={styles.progressContainer}>
+          <View style={styles.progressBar}>
               <View style={[styles.progressFill, { width: '58%' }]} />
-            </View>
-            <Text style={styles.progressText}>58%</Text>
-            <Text style={styles.pageText}>
-              Page 58/{book.pageCount}
-            </Text>
           </View>
-        )}
+            <Text style={styles.progressText}>58%</Text>
+          <Text style={styles.pageText}>
+              Page 58/{book.pageCount}
+          </Text>
+        </View>
+      )}
       </View>
     </TouchableOpacity>
   );

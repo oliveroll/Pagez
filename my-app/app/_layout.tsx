@@ -10,38 +10,38 @@ export default function AppLayout() {
       <ProfileProvider>
         <BooksProvider>
           <ReadingListsProvider>
-                         <Tabs
-               screenOptions={{
-                 headerShown: false,
-                 tabBarActiveTintColor: '#000',   // Customize as needed
-                 tabBarLabelStyle: { fontSize: 12 },
-               }}
-             >
-               <Tabs.Screen
-                 name="home"
-                 options={{
-                   title: 'Home',
-                 }}
-               />
-               <Tabs.Screen
-                 name="community"
-                 options={{
-                   title: 'Community',
-                 }}
-               />
-               <Tabs.Screen
-                 name="library"
-                 options={{
-                   title: 'Library',
-                 }}
-               />
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: '#000',   // Customize as needed
+        tabBarLabelStyle: { fontSize: 12 },
+      }}
+    >
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: 'Home',
+        }}
+      />
+      <Tabs.Screen
+        name="community"
+        options={{
+          title: 'Community',
+        }}
+      />
+      <Tabs.Screen
+        name="library"
+        options={{
+          title: 'Library',
+        }}
+      />
                <Tabs.Screen
                  name="test"
                  options={{
                    title: 'Test',
                  }}
                />
-             </Tabs>
+    </Tabs>
           </ReadingListsProvider>
         </BooksProvider>
       </ProfileProvider>
