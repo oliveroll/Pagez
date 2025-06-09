@@ -82,12 +82,12 @@ const styles = StyleSheet.create({
   },
   primaryText: {
     color: COLORS.background,
-    ...FONTS.medium,
+    fontFamily: FONTS.medium,
     fontSize: SIZES.medium,
   },
   outlineText: {
     color: COLORS.primary,
-    ...FONTS.medium,
+    fontFamily: FONTS.medium,
     fontSize: SIZES.medium,
   },
   disabledText: {

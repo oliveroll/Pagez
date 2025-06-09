@@ -64,11 +64,11 @@ const continueReadingBooks = [
 const HomeScreen = () => {
   // TODO: Replace with real API calls
   const handleBookPress = (bookId: string) => {
-    router.push(`/book/${bookId}`);
+    router.push('/book-more' as any);
   };
 
   const handleViewAllBookmarks = () => {
-    router.push('/bookmarks');
+    router.push('/home' as any);
   };
 
   const handleSearchPress = () => {
@@ -76,11 +76,14 @@ const HomeScreen = () => {
   };
 
   const handleProfilePress = () => {
-    router.push('/profile');
+    router.push('/home' as any);
   };
 
   const handleNavigation = (screen: string) => {
-    router.push(`/${screen}`);
+    if (screen === 'home') router.push('/home');
+    else if (screen === 'community') router.push('/community');
+    else if (screen === 'library') router.push('/library');
+    else router.push('/home' as any);
   };
 
   const renderBookmarkItem = (book: any) => (

@@ -9,82 +9,15 @@ import {
   StatusBar,
   SafeAreaView,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
+import { useBooks } from '../src/context/BooksContext';
+import { useAuth } from '../src/context/AuthContext';
+import { COLORS } from '../src/constants/colors';
+import { formatProgress } from '../src/utils/formatters';
 
 const { width } = Dimensions.get('window');
-
-// Mock data - Replace with API calls
-const continueReadingBooks = [
-  {
-    id: 1,
-    title: 'DUNE',
-    author: 'FRANK HERBERT',
-    progress: 58,
-    currentPage: 589,
-    totalPages: 1200,
-    cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300&h=400&fit=crop',
-  },
-  {
-    id: 2,
-    title: 'CITY OF ORANGE',
-    author: 'DAVID YOON',
-    progress: 58,
-    currentPage: 589,
-    totalPages: null,
-    cover: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=400&fit=crop',
-  },
-  {
-    id: 3,
-    title: 'THE MOON AND STARS',
-    author: 'Jenna Warren',
-    progress: 58,
-    currentPage: 589,
-    totalPages: null,
-    cover: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop',
-  },
-];
-
-const trendingBooks = [
-  {
-    id: 4,
-    title: "DON'T LOOK BACK",
-    author: 'ISAAC NELSON',
-    badge: 'VOTED BEST THRILLER NOVEL 20XX',
-    cover: 'https://images.unsplash.com/photo-1589998059171-988d887df646?w=300&h=400&fit=crop',
-  },
-  {
-    id: 5,
-    title: 'TARZAN',
-    author: 'Edgar Rice Burroughs',
-    cover: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=400&fit=crop',
-  },
-  {
-    id: 6,
-    title: 'WALK INTO THE SHADOW',
-    author: 'ESTELLE DARCY',
-    cover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&h=400&fit=crop',
-  },
-];
-
-const communityFavorites = [
-  {
-    id: 7,
-    title: 'HARRY POTTER',
-    author: 'DEATHLY',
-    cover: 'https://images.unsplash.com/photo-1621351183012-e2f9972dd9bf?w=300&h=400&fit=crop',
-  },
-  {
-    id: 8,
-    title: 'Sisters',
-    cover: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop',
-  },
-  {
-    id: 9,
-    title: 'The Summer',
-    cover: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=400&fit=crop',
-  },
-];
 
 const BookCard = ({ book, showProgress = false, size = 'medium' }) => {
   const cardWidth = size === 'large' ? width * 0.28 : width * 0.25;
@@ -92,28 +25,33 @@ const BookCard = ({ book, showProgress = false, size = 'medium' }) => {
   return (
     <TouchableOpacity 
       style={[styles.bookCard, { width: cardWidth }]} 
-      onPress={() => router.push(`/book/${book.id}` as any)} // Navigate to book details
+      onPress={() => router.push('/book-more')} // Navigate to book details
     >
       <View style={styles.bookCover}>
-        <Image source={{ uri: book.cover }} style={styles.coverImage} />
-        {book.badge && (
+        <Image source={{ uri: book.coverUrl || book.cover }} style={styles.coverImage} />
+        {book.tags && book.tags.includes('bestseller') && (
           <View style={styles.badge}>
-            <Text style={styles.badgeText}>{book.badge}</Text>
+            <Text style={styles.badgeText}>BESTSELLER</Text>
           </View>
         )}
       </View>
       
-      {showProgress && (
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: `${book.progress}%` }]} />
+      <View style={styles.bookInfo}>
+        <Text style={styles.bookTitle} numberOfLines={2}>{book.title}</Text>
+        <Text style={styles.bookAuthor} numberOfLines={1}>{book.author}</Text>
+        
+        {showProgress && book.pageCount && (
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View style={[styles.progressFill, { width: '58%' }]} />
+            </View>
+            <Text style={styles.progressText}>58%</Text>
+            <Text style={styles.pageText}>
+              Page 58/{book.pageCount}
+            </Text>
           </View>
-          <Text style={styles.progressText}>{book.progress}%</Text>
-          <Text style={styles.pageText}>
-            Page {book.currentPage}{book.totalPages ? `/${book.totalPages}` : ''}
-          </Text>
-        </View>
-      )}
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -126,13 +64,31 @@ const SectionHeader = ({ icon, title, iconColor = '#FF6B35' }) => (
 );
 
 export default function HomeScreen() {
+  const { books, trending, recommended, isLoading } = useBooks();
+  const { user } = useAuth();
+
+  if (isLoading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={COLORS.primary[500]} />
+          <Text style={styles.loadingText}>Loading books...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  // For continue reading, we'll use the first few books as mock "currently reading"
+  const continueReadingBooks = books.slice(0, 2);
+  const communityFavorites = recommended;
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
       
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('/menu' as any)}>
+        <TouchableOpacity onPress={() => router.push('/profile' as any)}>
           <View style={styles.menuButton} />
         </TouchableOpacity>
         
@@ -146,9 +102,9 @@ export default function HomeScreen() {
             <Text style={styles.searchIcon}>🔍</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity onPress={() => router.push('/profile')}>
+          <TouchableOpacity onPress={() => router.push('/profile' as any)}>
             <Image 
-              source={{ uri: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face' }} 
+              source={{ uri: user?.profilePicture || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face' }} 
               style={styles.profileImage}
             />
           </TouchableOpacity>
@@ -183,7 +139,7 @@ export default function HomeScreen() {
           style={styles.horizontalScroll}
           contentContainerStyle={styles.horizontalScrollContent}
         >
-          {trendingBooks.map((book) => (
+          {trending.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
         </ScrollView>
@@ -406,6 +362,29 @@ const styles = StyleSheet.create({
     height: 20,
     backgroundColor: '#000000',
     borderRadius: 15,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666666',
+  },
+  bookInfo: {
+    marginTop: 8,
+  },
+  bookTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333333',
+    marginBottom: 4,
+  },
+  bookAuthor: {
+    fontSize: 12,
+    color: '#666666',
   },
 });
 

@@ -33,17 +33,17 @@ export default function NewAuthorNoteScreen() {
 
   const handleReadingStatusPress = () => {
     // Backend developer: Navigate to reading status selection screen
-    router.push('/reading-status');
+    router.push('/home' as any);
   };
 
   const handleBookSelection = () => {
     // Backend developer: Navigate to book selection screen
-    router.push('/book-selection');
+    router.push('/home' as any);
   };
 
   const handleRatingPress = () => {
     // Backend developer: Navigate to rating screen or show rating modal
-    router.push('/rating');
+    router.push('/home' as any);
   };
 
   const handleAttachImage = () => {
@@ -64,7 +64,7 @@ export default function NewAuthorNoteScreen() {
     console.log('Posting note:', noteData);
     
     // After successful post, navigate back or to success screen
-    router.push('/note-success');
+    router.push('/home' as any);
   };
 
   return (

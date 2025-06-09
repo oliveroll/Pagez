@@ -8,83 +8,28 @@ import {
   StyleSheet,
   StatusBar,
   Dimensions,
+  ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { useBooks } from '../src/context/BooksContext';
+import { MOCK_POSTS, MOCK_AUTHORS } from '../src/constants/mockData';
+import { COLORS } from '../src/constants/colors';
+import { formatRelativeTime } from '../src/utils/formatters';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-// Mock data - Replace with API calls
-const mockBooks = [
-  {
-    id: '1',
-    title: 'The Martian',
-    author: 'Andy Weir',
-    cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=300&fit=crop',
-  },
-  {
-    id: '2',
-    title: 'Italo Calvino',
-    subtitle: 'Collezione di sabbia',
-    cover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=200&h=300&fit=crop',
-  },
-  {
-    id: '3',
-    title: 'Harry Potter',
-    subtitle: 'Chamber of Secrets',
-    author: 'J.K. Rowling',
-    cover: 'https://images.unsplash.com/photo-1621351183012-e2f9972dd9bf?w=200&h=300&fit=crop',
-  },
-];
+export default function CommunityScreen() {
+  const { books, trending, isLoading } = useBooks();
 
-const mockPosts = [
-  {
-    id: '1',
-    user: {
-      name: 'Samantha Jackson',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face',
-      currentBook: 'Pretty Little Liars',
-    },
-    book: {
-      title: 'Love at First',
-      cover: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=100&h=150&fit=crop',
-    },
-    rating: 3,
-    maxRating: 5,
-    text: 'Fantastic book! #weeklyreadings',
-    likes: '3k',
-    comments: '354',
-    timeAgo: '20 MINS AGO',
-    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=200&fit=crop',
-  },
-];
-
-const mockAuthors = [
-  {
-    id: '1',
-    name: 'Seth Rolins',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face',
-    isAuthor: true,
-    post: 'I think the book was amazing and took an awesome turn in the end. you have to read it and it\'s a must.',
-    engagement: 'let me know your comments about it.',
-    likes: '3k',
-    comments: '354',
-  },
-];
-
-export default function HomeScreen() {
-  // TODO: Replace with actual API calls
-  const fetchBooks = () => {
-    // API call to get trending books
-  };
-
-  const fetchCommunityPosts = () => {
-    // API call to get community posts
-  };
-
-  const fetchAuthors = () => {
-    // API call to get new authors
-  };
+  if (isLoading) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={COLORS.primary[500]} />
+        <Text style={{ marginTop: 10, color: COLORS.text.secondary }}>Loading community...</Text>
+      </View>
+    );
+  }
 
   const renderStars = (rating: number, maxRating: number) => {
     const stars = [];
@@ -105,9 +50,9 @@ export default function HomeScreen() {
     <TouchableOpacity
       key={book.id}
       style={styles.bookCard}
-      onPress={() => router.push(`/book/${book.id}`)}
+      onPress={() => router.push('/book-more' as any)}
     >
-      <Image source={{ uri: book.cover }} style={styles.bookCover} />
+      <Image source={{ uri: book.coverUrl || book.cover }} style={styles.bookCover} />
       {index === 1 && (
         <View style={styles.notificationBadge}>
           <Text style={styles.notificationText}>1</Text>
@@ -121,52 +66,58 @@ export default function HomeScreen() {
       <View style={styles.postHeader}>
         <TouchableOpacity
           style={styles.userInfo}
-          onPress={() => router.push(`/profile/${post.user.name}`)}
+          onPress={() => router.push('/home' as any)}
         >
-          <Image source={{ uri: post.user.avatar }} style={styles.avatar} />
+          <Image source={{ uri: post.user.profilePicture }} style={styles.avatar} />
           <View>
-            <Text style={styles.userName}>{post.user.name}</Text>
-            <Text style={styles.userActivity}>Reading "{post.user.currentBook}"</Text>
+            <Text style={styles.userName}>{post.user.displayName}</Text>
+            <Text style={styles.userActivity}>@{post.user.username}</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/post-options')}>
+        <TouchableOpacity onPress={() => router.push('/home' as any)}>
           <Ionicons name="ellipsis-horizontal" size={20} color="#999" />
         </TouchableOpacity>
       </View>
 
-      <View style={styles.postContent}>
-        <Image source={{ uri: post.image }} style={styles.postImage} />
-        <View style={styles.bookInfo}>
-          <Image source={{ uri: post.book.cover }} style={styles.smallBookCover} />
-          <View style={styles.ratingContainer}>
-            <View style={styles.stars}>
-              {renderStars(post.rating, post.maxRating)}
+      <Text style={styles.postText}>{post.content}</Text>
+
+      {/* Only show book info if the post has a book */}
+      {post.book && (
+        <View style={styles.postContent}>
+          <View style={styles.bookInfo}>
+            <Image source={{ uri: post.book.coverUrl }} style={styles.smallBookCover} />
+            <View style={styles.bookDetails}>
+              <Text style={styles.bookTitle}>{post.book.title}</Text>
+              <Text style={styles.bookAuthor}>by {post.book.author}</Text>
+              <View style={styles.ratingContainer}>
+                <View style={styles.stars}>
+                  {renderStars(Math.floor(post.book.rating), 5)}
+                </View>
+                <Text style={styles.ratingText}>{post.book.rating}/5</Text>
+              </View>
             </View>
-            <Text style={styles.ratingText}>{post.rating}/{post.maxRating}</Text>
           </View>
         </View>
-      </View>
-
-      <Text style={styles.postText}>{post.text}</Text>
+      )}
 
       <View style={styles.postFooter}>
         <View style={styles.engagement}>
           <TouchableOpacity
             style={styles.engagementButton}
-            onPress={() => router.push('/like-post')}
+            onPress={() => router.push('/home' as any)}
           >
-            <Ionicons name="heart-outline" size={18} color="#666" />
+            <Ionicons name={post.isLiked ? "heart" : "heart-outline"} size={18} color={post.isLiked ? "#FF6B35" : "#666"} />
             <Text style={styles.engagementText}>{post.likes}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.engagementButton}
-            onPress={() => router.push('/comments')}
+            onPress={() => router.push('/home' as any)}
           >
             <Ionicons name="chatbubble-outline" size={18} color="#666" />
-            <Text style={styles.engagementText}>{post.comments}</Text>
+            <Text style={styles.engagementText}>{post.commentsCount}</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.timeAgo}>{post.timeAgo}</Text>
+        <Text style={styles.timeAgo}>{new Date(post.createdAt).toLocaleDateString()}</Text>
       </View>
     </View>
   );
@@ -176,7 +127,7 @@ export default function HomeScreen() {
       <View style={styles.postHeader}>
         <TouchableOpacity
           style={styles.userInfo}
-          onPress={() => router.push(`/author/${author.id}`)}
+          onPress={() => router.push('/home' as any)}
         >
           <Image source={{ uri: author.avatar }} style={styles.avatar} />
           <View>
@@ -184,7 +135,7 @@ export default function HomeScreen() {
             <Text style={styles.authorBadge}>⭐ Author</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/post-options')}>
+        <TouchableOpacity onPress={() => router.push('/home' as any)}>
           <Ionicons name="ellipsis-horizontal" size={20} color="#999" />
         </TouchableOpacity>
       </View>
@@ -196,14 +147,14 @@ export default function HomeScreen() {
         <View style={styles.engagement}>
           <TouchableOpacity
             style={styles.engagementButton}
-            onPress={() => router.push('/like-post')}
+            onPress={() => router.push('/home' as any)}
           >
             <Ionicons name="heart-outline" size={18} color="#666" />
             <Text style={styles.engagementText}>{author.likes}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.engagementButton}
-            onPress={() => router.push('/comments')}
+            onPress={() => router.push('/home' as any)}
           >
             <Ionicons name="chatbubble-outline" size={18} color="#666" />
             <Text style={styles.engagementText}>{author.comments}</Text>
@@ -244,7 +195,7 @@ export default function HomeScreen() {
         <View style={styles.section}>
           <TouchableOpacity
             style={styles.sectionHeader}
-            onPress={() => router.push('/hot-topics')}
+            onPress={() => router.push('/home' as any)}
           >
             <Text style={styles.sectionTitle}>Hot topics</Text>
             <Ionicons name="chevron-down" size={20} color="#666" />
@@ -257,20 +208,20 @@ export default function HomeScreen() {
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.booksScroll}>
             <View style={styles.booksContainer}>
-              {mockBooks.map(renderBookCard)}
+              {trending.slice(0, 5).map(renderBookCard)}
             </View>
           </ScrollView>
         </View>
 
         {/* Community Posts */}
         <View style={styles.section}>
-          {mockPosts.map(renderCommunityPost)}
+          {MOCK_POSTS.map(renderCommunityPost)}
         </View>
 
         {/* New Authors Section */}
         <View style={styles.section}>
           <Text style={styles.newAuthorsTitle}>New Authors Joined!</Text>
-          {mockAuthors.map(renderAuthorPost)}
+          {MOCK_AUTHORS.map(renderAuthorPost)}
         </View>
       </ScrollView>
 
@@ -302,7 +253,7 @@ export default function HomeScreen() {
       {/* Floating Action Button */}
       <TouchableOpacity
         style={styles.fab}
-        onPress={() => router.push('/create-post')}
+        onPress={() => router.push('/home' as any)}
       >
         <Ionicons name="add" size={24} color="white" />
       </TouchableOpacity>
@@ -469,12 +420,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#E0E0E0',
   },
   bookInfo: {
-    position: 'absolute',
-    bottom: 10,
-    left: 10,
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
     gap: 10,
+    backgroundColor: '#F8F8F8',
+    padding: 12,
+    borderRadius: 8,
+    marginBottom: 10,
   },
   smallBookCover: {
     width: 40,
@@ -483,11 +435,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#E0E0E0',
   },
   ratingContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    padding: 8,
-    borderRadius: 6,
+    flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 6,
   },
   stars: {
     flexDirection: 'row',
@@ -609,5 +559,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 6,
     elevation: 8,
+  },
+  bookDetails: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  bookTitle: {
+    fontSize: 14,
+    fontFamily: 'Bogart-Bold-Trial',
+    color: '#333',
+    marginBottom: 2,
+  },
+  bookAuthor: {
+    fontSize: 12,
+    fontFamily: 'Bogart-Regular-Trial',
+    color: '#666',
+    marginBottom: 4,
   },
 });
