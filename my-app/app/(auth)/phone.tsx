@@ -41,7 +41,7 @@ export default function PhoneRegistrationScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={handleGoBack}>
-          <Ionicons name="chevron-back" size={24} color="#EB4D2A" />
+            <Ionicons name="chevron-back" size={24} color="#EB4D2A" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Register</Text>
       </View>

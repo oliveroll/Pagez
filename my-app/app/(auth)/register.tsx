@@ -15,7 +15,7 @@ import { router } from 'expo-router';
 const { width, height } = Dimensions.get('window');
 
 export default function RegistrationScreen() {
-  const [username, setUsername] = useState('');
+    const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
 
   const handleCreateAccount = () => {
@@ -106,7 +106,7 @@ export default function RegistrationScreen() {
             >
               <Ionicons name="logo-google" size={24} color="#FFFFFF" />
             </TouchableOpacity>
-
+            
             <TouchableOpacity 
               style={styles.socialButton} 
               onPress={() => handleSocialLogin('Facebook')}

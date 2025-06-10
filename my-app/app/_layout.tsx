@@ -3,6 +3,7 @@ import { router, Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import { useColorScheme } from 'react-native';
+import { useFonts } from 'expo-font';
 
 import { AuthProvider, useAuth } from '../src/context/AuthContext';
 import { BooksProvider } from '../src/context/BooksContext';
@@ -48,10 +49,24 @@ function AuthNavigator() {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
+  const [fontsLoaded] = useFonts({
+    'Bogart-Bold-trial': require('../src/assets/fonts/Bogart-Bold-trial.ttf'),
+    'Bogart-Regular-trial': require('../src/assets/fonts/Bogart-Regular-trial.ttf'),
+    'Bogart-Medium-trial': require('../src/assets/fonts/Bogart-Medium-trial.ttf'),
+    'Bogart-Light-trial': require('../src/assets/fonts/Bogart-Light-trial.ttf'),
+    'Bogart-Semibold-trial': require('../src/assets/fonts/Bogart-Semibold-trial.ttf'),
+  });
+
   useEffect(() => {
-    // Hide splash screen when component mounts
-    SplashScreen.hideAsync();
-  }, []);
+    if (fontsLoaded) {
+      // Hide splash screen when fonts are loaded
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null; // Keep splash screen visible while fonts load
+  }
 
   return (
     <AuthProvider>
