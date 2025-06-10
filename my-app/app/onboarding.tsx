@@ -14,6 +14,7 @@ import { router } from "expo-router";
 import { OnboardingSlide } from "../src/components/OnboardingSlide";
 import { PagezLogo } from "../src/components/Splash"; // Import your new SVG component
 import { WelcomeScreen3 } from "../src/components/onboarding"; // Import the new welcome screen
+import { WelcomeScreen4 } from "../src/components/onboarding/WelcomeScreen4"; // Import the avid readers screen
 import { COLORS, SIZES } from "../src/constants/theme";
 import LoginScreen from "./(auth)/login"; // Adjust path as needed
 const { width, height } = Dimensions.get("window");
@@ -22,7 +23,7 @@ const { width, height } = Dimensions.get("window");
 const DEBUG_MODE = true;
 
 // Import the specific splash images
-const splash3Image = require("../src/assets/images/3splash.png");
+// const splash3Image = require("../src/assets/images/3splash.png"); // No longer needed
 
 // Custom splash slide component using SVG
 const SplashSlide = () => {
@@ -42,14 +43,11 @@ const WelcomeSlide = () => {
   );
 };
 
-const Splash3Slide = () => {
+// Avid Readers Welcome Screen component wrapper
+const AvidReadersSlide = () => {
   return (
-    <View style={styles.imageSlide}>
-      <Image
-        source={splash3Image}
-        style={styles.splashImage}
-        resizeMode="cover"
-      />
+    <View style={styles.avidReadersSlide}>
+      <WelcomeScreen4 />
     </View>
   );
 };
@@ -69,9 +67,9 @@ const slides = [
   },
   {
     id: "3",
-    component: Splash3Slide,
-    title: "Third Screen",
-    description: "Additional onboarding",
+    component: AvidReadersSlide,
+    title: "Avid Readers",
+    description: "For avid readers & story tellers",
   },
   {
     id: "4",
@@ -251,6 +249,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#ffffff",
+  },
+  avidReadersSlide: {
+    width,
+    height,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FCF3EC",
   },
   imageSlide: {
     width,

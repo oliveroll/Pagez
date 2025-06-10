@@ -68,15 +68,18 @@ export const WelcomeScreen3: React.FC<WelcomeScreen3Props> = ({
             <Text style={styles.exploreText}>& explore{'\n'}stories</Text>
           </View>
           
-          {/* Navigation Dots */}
-          <View style={styles.dotsContainer}>
-            <View style={[styles.dot, styles.activeDot]} />
-            <View style={[styles.dot, styles.inactiveDot]} />
-            <View style={[styles.dot, styles.inactiveDot]} />
+          {/* Navigation and Home Indicator */}
+          <View style={styles.bottomNavigation}>
+            {/* Navigation Dots */}
+            <View style={styles.dotsContainer}>
+              <View style={[styles.dot, styles.activeDot]} />
+              <View style={[styles.dot, styles.inactiveDot]} />
+              <View style={[styles.dot, styles.inactiveDot]} />
+            </View>
+            
+            {/* Home Indicator */}
+            <View style={styles.homeIndicator} />
           </View>
-          
-          {/* Home Indicator */}
-          <View style={styles.homeIndicator} />
         </View>
       </View>
     </SafeAreaView>
@@ -127,7 +130,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingTop: 20,
-    paddingBottom: 40,
+    paddingBottom: 20,
     paddingHorizontal: 30,
   },
   textContainer: {
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
   readBooksText: {
     color: '#EB4D2A',
     fontFamily: 'Bogart-Bold-trial',
-    fontSize: 72.676,
+    fontSize: 62.676,
     fontStyle: 'normal',
     fontWeight: 'normal',
     lineHeight: 60.294,
@@ -147,12 +150,16 @@ const styles = StyleSheet.create({
   exploreText: {
     color: '#EB4D2A',
     fontFamily: 'Bogart-Medium-trial',
-    fontSize: 72.676,
+    fontSize: 40.676,
     fontStyle: 'normal',
-    fontWeight: '500',
-    lineHeight: 60.294,
+    fontWeight: '400',
+    lineHeight: 45.294,
     letterSpacing: -1.454,
     textAlign: 'left',
+  },
+  bottomNavigation: {
+    alignItems: 'center',
+    gap: 15,
   },
   dotsContainer: {
     flexDirection: 'row',
