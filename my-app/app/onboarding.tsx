@@ -1,19 +1,38 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Animated } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Dimensions, Animated, Image } from 'react-native';
 import { router } from 'expo-router';
 import { OnboardingSlide } from '../src/components/OnboardingSlide';
 import { PagezLogo } from '../src/components/Splash'; // Import your new SVG component
 import { COLORS, SIZES } from '../src/constants/theme';
 import LoginScreen from './(auth)/login'; // Adjust path as needed
 const { width, height } = Dimensions.get('window');
-import Onboarding2SVG from '../src/components/onboarding2SVG';
-import Onboarding3SVG from '../src/components/onboarding3SVG';
+
+// Import the specific splash images
+const splash2Image = require('../src/assets/images/2splash.png');
+const splash3Image = require('../src/assets/images/3splash.png');
 
 // Custom splash slide component using SVG
 const SplashSlide = () => {
   return (
     <View style={styles.splashSlide}>
       <PagezLogo width={width * 0.6} />
+    </View>
+  );
+};
+
+// Image slide components
+const Splash2Slide = () => {
+  return (
+    <View style={styles.imageSlide}>
+      <Image source={splash2Image} style={styles.splashImage} resizeMode="cover" />
+    </View>
+  );
+};
+
+const Splash3Slide = () => {
+  return (
+    <View style={styles.imageSlide}>
+      <Image source={splash3Image} style={styles.splashImage} resizeMode="cover" />
     </View>
   );
 };
@@ -27,13 +46,13 @@ const slides = [
   },
   {
     id: '2',
-    component: Onboarding2SVG,
+    component: Splash2Slide, // Use 2splash.png
     title: '',
     description: '',
   },
   {
     id: '3',
-    component: Onboarding3SVG,
+    component: Splash3Slide, // Use 3splash.png
     title: '',
     description: '',
   },
@@ -139,6 +158,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5f3f0', // Match your app's background color
+  },
+  imageSlide: {
+    width,
+    height,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f5f3f0',
+  },
+  splashImage: {
+    width: '100%',
+    height: '100%',
   },
   loginSlide: {
     width,

@@ -7,13 +7,15 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  Dimensions,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
+const { width, height } = Dimensions.get('window');
+
 export default function RegistrationScreen() {
-    // ...
-    const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
 
   const handleCreateAccount = () => {
@@ -25,6 +27,7 @@ export default function RegistrationScreen() {
   const handleSocialLogin = (provider) => {
     // Handle social login logic
     console.log(`Login with ${provider}`);
+    router.replace('/(auth)/create-profile' as any);
   };
 
   const handlePhoneLogin = () => {
@@ -37,7 +40,7 @@ export default function RegistrationScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor="#f5f3f0" />
       
       {/* Status Bar Indicator */}
       <View style={styles.statusIndicator} />
@@ -103,9 +106,27 @@ export default function RegistrationScreen() {
             >
               <Ionicons name="logo-google" size={24} color="#FFFFFF" />
             </TouchableOpacity>
-            
-            
-            
+
+            <TouchableOpacity 
+              style={styles.socialButton} 
+              onPress={() => handleSocialLogin('Facebook')}
+            >
+              <Ionicons name="logo-facebook" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.socialButton} 
+              onPress={() => handleSocialLogin('Instagram')}
+            >
+              <Ionicons name="logo-instagram" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+
+            <TouchableOpacity 
+              style={styles.socialButton} 
+              onPress={() => handleSocialLogin('TikTok')}
+            >
+              <Ionicons name="logo-tiktok" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -124,7 +145,7 @@ export default function RegistrationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#f5f3f0', // Changed to match login screen background
   },
   statusIndicator: {
     position: 'absolute',
@@ -169,17 +190,18 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 29,
+    paddingHorizontal: 30,
+    paddingTop: 20,
   },
   title: {
     fontFamily: 'Bogart-Bold-Trial',
-    fontSize: 20,
-    fontWeight: '600',
+    fontSize: Math.min(32, width * 0.085), // Much larger title
+    fontWeight: 'bold',
     color: '#1E1E1E',
-    textAlign: 'center',
-    letterSpacing: -0.04,
+    textAlign: 'center', // Centered like "Use phone number instead"
+    letterSpacing: -0.5,
     marginBottom: 40,
+    lineHeight: Math.min(38, width * 0.095),
   },
   inputContainer: {
     marginBottom: 20,
@@ -188,72 +210,73 @@ const styles = StyleSheet.create({
     height: 52,
     borderWidth: 1,
     borderColor: '#BBAEA8',
-    borderRadius: 45,
-    paddingHorizontal: 20,
-    fontFamily: 'Bogart-Regular-Trial',
-    fontSize: 17,
+    borderRadius: 26,
+    paddingHorizontal: 25,
+    fontFamily: 'Inter',
+    fontSize: 16,
     fontWeight: '500',
     color: '#1E1E1E',
-    letterSpacing: -0.04,
+    letterSpacing: -0.5,
+    backgroundColor: '#FFFFFF',
   },
   phoneOption: {
-    fontFamily: 'Bogart-Bold-Trial',
-    fontSize: 20,
-    fontWeight: '600',
+    fontFamily: 'Inter',
+    fontSize: 16,
+    fontWeight: 'bold',
     color: '#1E1E1E',
     textAlign: 'center',
-    letterSpacing: -0.04,
-    marginTop: 20,
-    marginBottom: 60,
+    letterSpacing: -0.5,
+    marginTop: 30,
+    marginBottom: 100, // Much more space before social section
   },
   socialSection: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 10,
   },
   socialTitle: {
-    fontFamily: 'Bogart-Bold-Trial',
-    fontSize: 20,
-    fontWeight: '600',
+    fontFamily: 'Inter',
+    fontSize: 16,
+    fontWeight: 'bold',
     color: '#1E1E1E',
-    letterSpacing: -0.04,
-    marginBottom: 24,
+    letterSpacing: -0.5,
+    marginBottom: 30,
   },
   socialButtonsContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 16,
+    gap: 12, // Spacing between social buttons
   },
   socialButton: {
-    width: 44,
-    height: 44,
+    width: 48,
+    height: 48,
     backgroundColor: '#1E1E1E',
-    borderRadius: 45,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
   createButton: {
     height: 55,
     backgroundColor: '#EB4D2A',
-    borderRadius: 45,
+    borderRadius: 27.5,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 'auto',
     marginBottom: 40,
   },
   createButtonText: {
-    fontFamily: 'Bogart-Bold-Trial',
-    fontSize: 20,
+    fontFamily: 'Inter',
+    fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
-    letterSpacing: -0.04,
+    letterSpacing: -0.5,
   },
   homeIndicator: {
     position: 'absolute',
-    bottom: 8,
-    right: 8,
+    bottom: 10,
+    alignSelf: 'center',
     width: 139,
     height: 5,
     backgroundColor: '#000000',
-    borderRadius: 100,
+    borderRadius: 2.5,
   },
 });
