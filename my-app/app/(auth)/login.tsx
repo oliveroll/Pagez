@@ -22,13 +22,58 @@ const bookHeaderImage = require('../../src/assets/images/book-header.png');
 
 const { width, height } = Dimensions.get('window');
 
+// Login Button Component
+const LoginButton = ({ onPress, title = "Login" }) => (
+  <TouchableOpacity onPress={onPress} style={styles.loginButton}>
+    <Text style={styles.loginButtonText}>{title}</Text>
+  </TouchableOpacity>
+);
+
+// Input Field Component
+const LoginInput = ({ placeholder, value, onChangeText, secureTextEntry = false }) => (
+  <View style={styles.inputWrapper}>
+    <TextInput
+      style={styles.input}
+      placeholder={placeholder}
+      placeholderTextColor="#BBAEA8"
+      value={value}
+      onChangeText={onChangeText}
+      secureTextEntry={secureTextEntry}
+      autoCapitalize="none"
+      keyboardType={placeholder.toLowerCase().includes('email') ? 'email-address' : 'default'}
+    />
+  </View>
+);
+
+// Page Indicator Component
+const PageIndicator = ({ currentPage = 2, totalPages = 3 }) => (
+  <View style={styles.pageIndicator}>
+    {Array.from({ length: totalPages }).map((_, index) => (
+      <View
+        key={index}
+        style={[
+          styles.dot,
+          index === currentPage ? styles.activeDot : styles.inactiveDot
+        ]}
+      />
+    ))}
+  </View>
+);
+
+// Home Indicator Component
+const HomeIndicator = () => (
+  <View style={styles.homeIndicator}>
+    <View style={styles.homeIndicatorBar} />
+  </View>
+);
+
 export default function LoginScreen({ inOnboarding }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   // Google AuthSession setup
   const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: '407408718192.apps.googleusercontent.com', // Expo Go demo client ID
+    clientId: '407408718192.apps.googleusercontent.com',
     iosClientId: '',
     androidClientId: '',
     webClientId: '',
@@ -37,45 +82,28 @@ export default function LoginScreen({ inOnboarding }) {
   // Handle Google Auth response
   React.useEffect(() => {
     if (response?.type === 'success') {
-      // TODO: Send response.authentication.accessToken to backend/Firebase here
-      router.replace('/home' as any);
+      router.replace('/(auth)/create-profile');
     }
   }, [response]);
 
   const handleLogin = () => {
-    // TODO: Add real authentication logic here
-    router.replace('/home' as any);
+    if (username.trim() && password.trim()) {
+      router.replace('/(auth)/create-profile');
+    } else {
+      router.replace('/(auth)/create-profile');
+    }
   };
 
   const handleSocialLogin = (platform) => {
-    // TODO: Backend Implementation Required
-    // 1. For Google Sign-In:
-    //    - Implement proper Google OAuth flow using expo-auth-session
-    //    - Set up Google Cloud Console project and configure OAuth 2.0
-    //    - Add proper client IDs for iOS and Android
-    //    - Handle token exchange and user profile fetching
-    //    - Store user session securely
-    //
-    // 2. For Apple Sign-In:
-    //    - Implement Apple Sign-In using expo-auth-session
-    //    - Configure Apple Developer account and set up Sign in with Apple
-    //    - Add proper service ID and key ID
-    //    - Handle token exchange and user profile fetching
-    //    - Store user session securely
-    //
-    // 3. Security Considerations:
-    //    - Implement proper token storage and refresh mechanisms
-    //    - Add proper error handling for auth failures
-    //    - Implement secure session management
-    //    - Add proper user profile data handling
-    //    - Consider implementing biometric authentication for additional security
-
-    // Temporary navigation to home screen
-    router.replace('/home' as any);
+    if (platform === 'Google') {
+      promptAsync();
+    } else {
+      router.replace('/(auth)/create-profile');
+    }
   };
 
   const handleUsePhone = () => {
-    router.push('/(auth)/phone' as any);
+    router.push('/(auth)/phone');
   };
 
   const handleJoinNow = () => {
@@ -94,9 +122,8 @@ export default function LoginScreen({ inOnboarding }) {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header Section with rotated image and decorative elements */}
+        {/* Header Section with rotated image */}
         <View style={styles.headerSection}>
-          {/* Rotated background image - positioned more in corner */}
           <View style={styles.rotatedImageContainer}>
             <Image
               source={bookHeaderImage}
@@ -105,7 +132,6 @@ export default function LoginScreen({ inOnboarding }) {
             />
           </View>
           
-          {/* Logo - made bigger and repositioned */}
           <Text style={styles.logo}>pagez</Text>
         </View>
 
@@ -113,36 +139,24 @@ export default function LoginScreen({ inOnboarding }) {
         <View style={styles.content}>
           <Text style={styles.title}>Let's go...</Text>
 
-          {/* Input Fields */}
+          {/* Input Fields with exact same spacing */}
           <View style={styles.inputContainer}>
-            <View style={styles.inputWrapper}>
-              <TextInput
-                style={styles.input}
-                placeholder="Username or Email"
-                placeholderTextColor="#BBAEA8"
-                value={username}
-                onChangeText={setUsername}
-                autoCapitalize="none"
-                keyboardType="email-address"
-              />
-            </View>
+            <LoginInput
+              placeholder="Username or Email"
+              value={username}
+              onChangeText={setUsername}
+            />
             
-            <View style={styles.inputWrapper}>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#BBAEA8"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-            </View>
-          </View>
+            <LoginInput
+              placeholder="Password"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
 
-          {/* Login Button */}
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-            <Text style={styles.loginButtonText}>Login</Text>
-          </TouchableOpacity>
+            {/* Login Button with same spacing */}
+            <LoginButton onPress={handleLogin} />
+          </View>
 
           {/* Use phone number instead */}
           <TouchableOpacity onPress={handleUsePhone} style={styles.phoneLink}>
@@ -156,9 +170,9 @@ export default function LoginScreen({ inOnboarding }) {
             <View style={styles.socialButtons}>
               <TouchableOpacity 
                 style={styles.socialButton} 
-                onPress={() => handleSocialLogin('Apple')}
+                onPress={() => handleSocialLogin('Facebook')}
               >
-                <Ionicons name="logo-apple" size={24} color="#FFFFFF" />
+                <Ionicons name="logo-facebook" size={24} color="#FFFFFF" />
               </TouchableOpacity>
               
               <TouchableOpacity 
@@ -166,6 +180,27 @@ export default function LoginScreen({ inOnboarding }) {
                 onPress={() => handleSocialLogin('Google')}
               >
                 <Ionicons name="logo-google" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={styles.socialButton} 
+                onPress={() => handleSocialLogin('Facebook')}
+              >
+                <Ionicons name="logo-facebook" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+
+              <TouchableOpacity 
+                style={styles.socialButton} 
+                onPress={() => handleSocialLogin('Instagram')}
+              >
+                <Ionicons name="logo-instagram" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={styles.socialButton} 
+                onPress={() => handleSocialLogin('Apple')}
+              >
+                <Ionicons name="logo-apple" size={24} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           </View>
@@ -181,13 +216,12 @@ export default function LoginScreen({ inOnboarding }) {
           </View>
 
           {/* Page Indicator */}
-          <View style={styles.pageIndicator}>
-            <View style={styles.dot} />
-            <View style={styles.dot} />
-            <View style={[styles.dot, styles.activeDot]} />
-          </View>
+          <PageIndicator />
         </View>
       </ScrollView>
+      
+      {/* Home Indicator */}
+      <HomeIndicator />
     </SafeAreaView>
   );
 }
@@ -203,19 +237,19 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     paddingBottom: 40,
-    minHeight: height, // Ensure minimum height for proper scrolling
+    minHeight: height,
   },
   headerSection: {
-    height: Math.min(300, height * 0.42), // Increased height to accommodate larger logo
+    height: Math.min(250, height * 0.32), // Even more compact for tighter spacing
     position: 'relative',
-    overflow: 'visible', // Changed to visible to prevent clipping
+    overflow: 'visible',
   },
   rotatedImageContainer: {
     position: 'absolute',
-    width: Math.min(320, width * 0.85), // Adjusted size
-    height: Math.min(320, height * 0.32), // Adjusted size
-    right: -40, // Positioned more in the corner
-    top: -20, // Moved up
+    width: Math.min(320, width * 0.85),
+    height: Math.min(320, height * 0.32),
+    right: -40,
+    top: -20,
     transform: [{ rotate: '-9.33deg' }],
     borderRadius: 8,
     overflow: 'hidden',
@@ -224,62 +258,53 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  pinkSticky: {
-    position: 'absolute',
-    width: 35,
-    height: 45,
-    left: width * 0.25, // Adjusted to not overlap with logo
-    top: 80, // Fixed position instead of percentage
-    backgroundColor: '#FEB3D2',
-    borderRadius: 3,
-    transform: [{ rotate: '-18deg' }],
-  },
-  yellowSticky: {
-    position: 'absolute',
-    width: 50,
-    height: 60,
-    right: width * 0.35, // Adjusted position to work with new image size
-    top: 120, // Fixed position instead of percentage
-    backgroundColor: '#F5C106',
-    borderRadius: 3,
-    transform: [{ rotate: '10.49deg' }],
-  },
   logo: {
     position: 'absolute',
     left: 25,
-    top: 45, // Adjusted to not cut into image
-    fontSize: Math.min(42, width * 0.105), // Slightly smaller to fit better
+    top: 20, // Moved closer to title
+    fontSize: Math.min(52, width * 0.13),
     fontFamily: 'Bogart-Bold-Trial',
     color: '#EB4D2A',
     fontWeight: 'bold',
-    zIndex: 10, // Ensure logo is above other elements
+    fontStyle: 'italic',
+    zIndex: 10,
+    textShadowColor: 'rgba(235, 77, 42, 0.2)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+    transform: [{ rotate: '-3deg' }],
+    letterSpacing: 2,
   },
   content: {
-    paddingHorizontal: 30, // Increased padding to match design
-    paddingTop: 20,
+    paddingHorizontal: 30,
+    paddingTop: 0, // No space between logo and title
   },
   title: {
-    fontSize: Math.min(42, width * 0.11),
-    fontFamily: 'Bogart-Regular-Trial',
+    fontSize: Math.min(48, width * 0.12),
+    fontFamily: 'Bogart-Bold-Trial', // Made bold as requested
     color: '#EB4D2A',
-    fontWeight: '500',
-    lineHeight: Math.min(50, width * 0.13),
-    letterSpacing: -1,
-    marginBottom: 35, // Increased margin
+    fontWeight: 'bold', // Made bold
+    fontStyle: 'italic',
+    lineHeight: Math.min(54, width * 0.135),
+    letterSpacing: 1,
+    marginBottom: 12, // Tighter spacing before inputs
+    textShadowColor: 'rgba(235, 77, 42, 0.15)',
+    textShadowOffset: { width: 1.5, height: 1.5 },
+    textShadowRadius: 3,
+    transform: [{ rotate: '-1deg' }],
   },
   inputContainer: {
-    marginBottom: 30, // Increased margin
+    marginBottom: 0, // Removed margin to control spacing individually
   },
   inputWrapper: {
-    width: '100%', // Full width
-    height: 55, // Slightly taller
-    borderWidth: 1.5, // Slightly thicker border
+    width: '100%',
+    height: 52,
+    borderWidth: 1,
     borderColor: '#BBAEA8',
-    borderRadius: 28, // More rounded
-    marginBottom: 18, // Increased spacing
-    paddingHorizontal: 25, // More padding
+    borderRadius: 26,
+    marginBottom: 8, // Exact same 8px spacing between all elements
+    paddingHorizontal: 25,
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF', // Added white background
+    backgroundColor: '#FFFFFF',
   },
   input: {
     fontSize: 16,
@@ -289,65 +314,66 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   loginButton: {
-    width: '100%', // Full width
-    height: 58, // Slightly taller
+    width: '100%',
+    height: 55,
     backgroundColor: '#EB4D2A',
-    borderRadius: 29,
+    borderRadius: 27.5,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20, // Increased margin
+    marginBottom: 20, // Spacing after login button
+    marginTop: 0, // Removed to ensure consistent 8px spacing from password field
   },
   loginButtonText: {
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Inter',
     fontWeight: '600',
     letterSpacing: -0.5,
   },
   phoneLink: {
     alignItems: 'center',
-    marginBottom: 35, // Increased margin
+    marginBottom: 30,
   },
   phoneLinkText: {
     fontSize: 16,
     fontFamily: 'Inter',
-    fontWeight: '600',
+    fontWeight: 'bold',
     color: '#1E1E1E',
     letterSpacing: -0.5,
   },
   socialSection: {
     alignItems: 'center',
-    marginBottom: 30, // Increased margin
+    marginBottom: 25,
   },
   socialTitle: {
     fontSize: 16,
     fontFamily: 'Inter',
-    fontWeight: '600',
+    fontWeight: 'bold',
     color: '#1E1E1E',
     letterSpacing: -0.5,
-    marginBottom: 25, // Increased margin
+    marginBottom: 20,
   },
   socialButtons: {
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 15, // Increased gap
+    gap: 12,
   },
   socialButton: {
-    width: 50, // Made slightly bigger
-    height: 50, // Made slightly bigger
+    width: 48,
+    height: 48,
     backgroundColor: '#1E1E1E',
-    borderRadius: 25,
+    borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
   },
   signupSection: {
     alignItems: 'center',
-    marginBottom: 30, // Increased margin
+    marginBottom: 25,
   },
   signupText: {
     fontSize: 16,
     fontFamily: 'Inter',
-    fontWeight: '500',
+    fontWeight: 'bold',
     color: '#1E1E1E',
     letterSpacing: -0.5,
     lineHeight: 22,
@@ -355,22 +381,37 @@ const styles = StyleSheet.create({
   },
   joinNowText: {
     color: '#EB4D2A',
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
   pageIndicator: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    gap: 12, // Slightly increased gap
+    gap: 12,
     marginBottom: 20,
   },
   dot: {
     width: 10,
     height: 10,
     borderRadius: 5,
-    backgroundColor: '#D9D9D9',
   },
   activeDot: {
     backgroundColor: '#EB4D2A',
+  },
+  inactiveDot: {
+    backgroundColor: '#D9D9D9',
+  },
+  homeIndicator: {
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
+    width: 139,
+    height: 5,
+  },
+  homeIndicatorBar: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#000000',
+    borderRadius: 2.5,
   },
 });

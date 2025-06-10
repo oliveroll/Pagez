@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { router } from 'expo-router';
 import { AuthContextType, LoginForm, RegisterForm, User } from '../types';
 import { MOCK_USERS } from '../constants/mockData';
 
@@ -21,13 +22,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // For now, we'll just set the loading to false since we're using mock auth
         // TODO: Implement AsyncStorage when adding real authentication
         
-        // Auto-login the first mock user for development/testing purposes
-        // Comment out the lines below if you want to start without being logged in
-        const mockUser = MOCK_USERS[0]; // Alex Johnson
-        if (mockUser) {
-          setUser(mockUser);
-          setIsAuthenticated(true);
-        }
+        // Auto-login disabled to show onboarding flow
+        // Uncomment the lines below if you want to skip onboarding for testing
+        // const mockUser = MOCK_USERS[0]; // Alex Johnson
+        // if (mockUser) {
+        //   setUser(mockUser);
+        //   setIsAuthenticated(true);
+        // }
       } catch (error) {
         // Silently handle any errors during auth check
         console.log('Auth check completed');
@@ -152,4 +153,25 @@ export const useAuth = (): AuthContextType => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-}; 
+};
+
+export const withAuth = <P extends object>(
+  Component: React.ComponentType<P>
+): React.FC<P> => {
+  return function AuthComponent(props: P) {
+    const { isAuthenticated, isLoading } = useAuth();
+
+    if (isLoading) {
+      return null; // Or loading component
+    }
+
+    if (!isAuthenticated) {
+      router.replace('/onboarding');
+      return null;
+    }
+
+    return <Component {...props} />;
+  };
+};
+
+export default AuthContext; 

@@ -37,7 +37,6 @@ const slides = [
     title: '',
     description: '',
   },
-
   {
     id: '4',
     component: () => <LoginScreen inOnboarding />,
@@ -54,7 +53,6 @@ export default function Onboarding() {
   const viewableItemsChanged = useRef(({ viewableItems }: any) => {
     const index = viewableItems[0]?.index ?? 0;
     setCurrentIndex(index);
-    // Do not navigate away when the login slide is visible
   }).current;
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
@@ -66,12 +64,19 @@ export default function Onboarding() {
   };
 
   useEffect(() => {
-    // Only auto-advance from the splash (first) slide
+    // Auto-advance from splash slide after 2 seconds
     if (currentIndex === 0) {
       timerRef.current = setTimeout(() => {
         scrollToNext();
-      }, 1000);
+      }, 2000);
     }
+    // Auto-advance from slides 2 and 3 after 3 seconds each
+    else if (currentIndex === 1 || currentIndex === 2) {
+      timerRef.current = setTimeout(() => {
+        scrollToNext();
+      }, 3000);
+    }
+    
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -111,7 +116,7 @@ export default function Onboarding() {
         onViewableItemsChanged={viewableItemsChanged}
         viewabilityConfig={viewConfig}
         ref={slidesRef}
-        scrollEnabled={currentIndex !== 0} // Only enable manual scroll after splash
+        scrollEnabled={currentIndex >= 3} // Enable manual scroll only on login screen
       />
     </View>
   );
