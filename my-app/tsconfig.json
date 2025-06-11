@@ -6,19 +6,30 @@
     "isolatedModules": true,
     "jsx": "react-native",
     "lib": [
-      "es6"
+      "es6",
+      "dom"
     ],
     "moduleResolution": "node",
     "noEmit": true,
     "strict": false,
     "target": "esnext",
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "declaration": false,
+    "declarationMap": false,
+    "incremental": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "expo-env.d.ts"
+    "**/*.js",
+    "**/*.jsx",
+    "expo-env.d.ts",
+    ".expo/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

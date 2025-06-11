@@ -93,63 +93,17 @@ export default function CreateProfileScreen() {
       <SafeAreaView style={styles.welcomeContainer}>
         <StatusBar barStyle="light-content" backgroundColor="#EB4D2A" />
         
-        {/* Status Bar Indicator */}
-        <View style={styles.welcomeStatusIndicator} />
-        
-        {/* Decorative Paper Elements - Book Pages */}
-        <View style={styles.paperElement1}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement2}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement3}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement4}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement5}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement6}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement7}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
+        {/* Decorative Paper Elements - Using actual PNG images */}
+        <Image 
+          source={require('../../src/assets/images/onboarding/Group_paper_up.png')} 
+          style={styles.paperGroupUp}
+          resizeMode="contain"
+        />
+        <Image 
+          source={require('../../src/assets/images/onboarding/Group paper_down.png')} 
+          style={styles.paperGroupDown}
+          resizeMode="contain"
+        />
 
         {/* Main Content */}
         <View style={styles.finalOnboardingContent}>
@@ -186,63 +140,17 @@ export default function CreateProfileScreen() {
       <SafeAreaView style={styles.welcomeContainer}>
         <StatusBar barStyle="light-content" backgroundColor="#EB4D2A" />
         
-        {/* Status Bar Indicator */}
-        <View style={styles.welcomeStatusIndicator} />
-        
-        {/* Decorative Paper Elements - Book Pages */}
-        <View style={styles.paperElement1}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement2}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement3}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement4}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement5}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement6}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
-        <View style={styles.paperElement7}>
-          <View style={styles.paperLines}>
-            <View style={styles.paperLine} />
-            <View style={styles.paperLine} />
-          </View>
-        </View>
+        {/* Decorative Paper Elements - Using actual PNG images */}
+        <Image 
+          source={require('../../src/assets/images/onboarding/Group_paper_up.png')} 
+          style={styles.paperGroupUp}
+          resizeMode="contain"
+        />
+        <Image 
+          source={require('../../src/assets/images/onboarding/Group paper_down.png')} 
+          style={styles.paperGroupDown}
+          resizeMode="contain"
+        />
 
         {/* Main Content */}
         <View style={styles.welcomeContent}>
@@ -538,133 +446,31 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
     borderRadius: 50,
   },
-  paperElement1: {
+  paperGroupUp: {
     position: 'absolute',
-    top: 60,
-    left: -60,
-    width: 140,
-    height: 100,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    transform: [{ rotate: '25deg' }],
-    opacity: 0.95,
-    padding: 12,
-    shadowColor: '#000000',
-    shadowOffset: { width: 2, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
+    top: -50,
+    left: 0,
+    right: 0,
+    width: '100%',
+    height: 400,
   },
-  paperElement2: {
+  paperGroupDown: {
     position: 'absolute',
-    top: 90,
-    right: -40,
-    width: 80,
-    height: 70,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    transform: [{ rotate: '-20deg' }],
-    opacity: 0.9,
-    padding: 8,
-    shadowColor: '#000000',
-    shadowOffset: { width: 2, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  paperElement3: {
-    position: 'absolute',
-    top: 180,
-    right: -30,
-    width: 60,
-    height: 60,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 6,
-    transform: [{ rotate: '15deg' }],
-    opacity: 0.85,
-    padding: 6,
-    shadowColor: '#000000',
-    shadowOffset: { width: 2, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  paperElement4: {
-    position: 'absolute',
-    top: 400,
-    right: -50,
-    width: 90,
-    height: 75,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    transform: [{ rotate: '-30deg' }],
-    opacity: 0.9,
-    padding: 10,
-    shadowColor: '#000000',
-    shadowOffset: { width: 2, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  paperElement5: {
-    position: 'absolute',
-    bottom: 180,
-    left: -70,
-    width: 130,
-    height: 110,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    transform: [{ rotate: '35deg' }],
-    opacity: 0.95,
-    padding: 15,
-    shadowColor: '#000000',
-    shadowOffset: { width: 2, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  paperElement6: {
-    position: 'absolute',
-    bottom: 120,
-    right: -45,
-    width: 85,
-    height: 85,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 10,
-    transform: [{ rotate: '-25deg' }],
-    opacity: 0.9,
-    padding: 10,
-    shadowColor: '#000000',
-    shadowOffset: { width: 2, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  paperElement7: {
-    position: 'absolute',
-    bottom: 60,
-    right: 20,
-    width: 50,
-    height: 50,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 6,
-    transform: [{ rotate: '45deg' }],
-    opacity: 0.8,
-    padding: 6,
-    shadowColor: '#000000',
-    shadowOffset: { width: 2, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 5,
+    bottom: -25,
+    left: 0,
+    right: 0,
+    width: '100%',
+    height: 400,
   },
   welcomeContent: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 30,
+    paddingTop: 170,
   },
   welcomeProfileContainer: {
-    marginBottom: 40,
+    marginBottom: 25,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -690,26 +496,28 @@ const styles = StyleSheet.create({
   },
   welcomeTextContainer: {
     alignItems: 'center',
-    marginBottom: 60,
+    marginBottom: 30,
   },
   welcomeGreeting: {
-    fontSize: 28,
-    fontFamily: 'Bogart-Light-trial',
-    fontStyle: 'italic',
-    color: '#FFFFFF',
-    marginBottom: 15,
+    color: '#FCF3EC',
     textAlign: 'center',
-    letterSpacing: 0.5,
+    fontFamily: 'Bogart-Medium-trial',
+    fontSize: 34,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 60.294,
+    letterSpacing: -0.68,
+    marginBottom: 15,
   },
   welcomeTitle: {
-    fontSize: 48,
-    fontFamily: 'Bogart-Bold-Trial',
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FCF3EC',
     textAlign: 'center',
-    lineHeight: 50,
-    letterSpacing: -1,
-    fontStyle: 'italic',
+    fontFamily: 'Bogart-Semibold-trial',
+    fontSize: 54,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 50.294,
+    letterSpacing: -0.28,
   },
   welcomeButtonContainer: {
     position: 'absolute',
@@ -762,14 +570,17 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   finalOnboardingText: {
-    fontSize: 32,
-    fontFamily: 'Bogart-Bold-Trial',
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    color: '#FCF3EC',
+    fontFamily: 'Bogart-Regular-trial',
+    fontSize: 45,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    lineHeight: 39,
+    letterSpacing: -1.08,
     marginBottom: 30,
     textAlign: 'left',
-    letterSpacing: 0.5,
-    lineHeight: 38,
+    left: 20,
+    top: 10,
   },
   startButton: {
     height: 55,
