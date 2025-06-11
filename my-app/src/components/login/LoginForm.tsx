@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 16,
-    fontFamily: 'Inter',
-    fontWeight: '500',
+    fontFamily: 'Bogart-Medium-trial',
+    fontWeight: 'normal',
     color: '#1E1E1E',
     letterSpacing: -0.5,
   },
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
   loginButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontFamily: 'Inter',
-    fontWeight: '600',
+    fontFamily: 'Bogart-Semibold-trial',
+    fontWeight: 'normal',
     letterSpacing: -0.5,
   },
   phoneLink: {
@@ -111,10 +111,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   phoneLinkText: {
-    fontSize: 16,
-    fontFamily: 'Inter',
-    fontWeight: 'bold',
     color: '#1E1E1E',
-    letterSpacing: -0.5,
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 28,
+    letterSpacing: -0.8,
   },
 });

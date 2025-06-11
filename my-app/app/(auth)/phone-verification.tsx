@@ -56,7 +56,10 @@ export default function PhoneVerificationScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FCF3EC" />
+      
+      {/* Status Bar Indicator */}
+      <View style={styles.statusIndicator} />
       
       <KeyboardAvoidingView
         style={{ flex: 1 }}
@@ -128,15 +131,24 @@ export default function PhoneVerificationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FCF3EC',
+  },
+  statusIndicator: {
+    position: 'absolute',
+    top: 25,
+    left: '50%',
+    marginLeft: -53.5, // Half of 107px
+    width: 107,
+    height: 35,
+    backgroundColor: '#000000',
+    borderRadius: 50,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 78,
     paddingBottom: 20,
-    position: 'relative',
   },
   backButton: {
     width: 44,
@@ -148,15 +160,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
+    flex: 1,
     textAlign: 'center',
-    fontFamily: 'Bogart-Bold-Trial',
+    fontFamily: 'Inter',
     fontSize: 16,
     fontWeight: '600',
     color: '#1E1E1E',
-    letterSpacing: -0.04,
+    letterSpacing: -0.64,
+    lineHeight: 28,
+    marginRight: 44, // To center the title accounting for back button
   },
   divider: {
     height: 1,
@@ -165,17 +177,17 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 40,
+    paddingHorizontal: 30,
+    paddingTop: 20,
   },
   instructionText: {
-    fontFamily: 'Bogart-Bold-Trial',
+    fontFamily: 'Inter',
     fontSize: 20,
     fontWeight: '600',
     lineHeight: 28,
     textAlign: 'center',
     color: '#1E1E1E',
-    letterSpacing: -0.04,
+    letterSpacing: -0.8,
     marginBottom: 60,
     paddingHorizontal: 10,
   },
@@ -227,11 +239,12 @@ const styles = StyleSheet.create({
     letterSpacing: -0.04,
   },
   homeIndicator: {
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
     width: 139,
     height: 5,
     backgroundColor: '#000000',
-    borderRadius: 100,
-    alignSelf: 'center',
-    marginBottom: 8,
+    borderRadius: 2.5,
   },
 });

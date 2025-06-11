@@ -284,14 +284,17 @@ export default function CreateProfileScreen() {
   // Initial profile setup screen
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FCF3EC" />
+      
+      {/* Status Bar Indicator */}
+      <View style={styles.statusIndicator} />
       
       <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.backButton}
-            onPress={() => router.back()}
+            onPress={() => router.replace('/(auth)/login')}
         >
           <Ionicons name="chevron-back" size={24} color="#EB4D2A" />
         </TouchableOpacity>
@@ -382,7 +385,17 @@ export default function CreateProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#FCF3EC',
+  },
+  statusIndicator: {
+    position: 'absolute',
+    top: 25,
+    left: '50%',
+    marginLeft: -53.5, // Half of 107px
+    width: 107,
+    height: 35,
+    backgroundColor: '#000000',
+    borderRadius: 50,
   },
   scrollView: {
     flex: 1,
@@ -391,9 +404,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingTop: 78,
     paddingBottom: 20,
-    position: 'relative',
   },
   backButton: {
     width: 44,
@@ -405,24 +417,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
+    flex: 1,
     textAlign: 'center',
     fontFamily: 'Bogart-Bold-Trial',
     fontSize: 16,
     fontWeight: '600',
     color: '#1E1E1E',
     letterSpacing: -0.04,
+    marginRight: 44, // To center the title accounting for back button
   },
   divider: {
     height: 1,
-    backgroundColor: 'rgba(217, 217, 217, 0.5)',
-    marginHorizontal: 20,
+    backgroundColor: 'rgba(171, 176, 186, 0.4)',
+    marginHorizontal: 0,
   },
   content: {
-    paddingHorizontal: 20,
-    paddingTop: 30,
+    paddingHorizontal: 30,
+    paddingTop: 20,
     paddingBottom: 30,
   },
   instructionText: {

@@ -6,7 +6,11 @@ import { WelcomeScreen5 } from '../../src/components/login';
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function LoginScreen({ inOnboarding }) {
+interface LoginScreenProps {
+  inOnboarding?: boolean;
+}
+
+export default function LoginScreen({ inOnboarding }: LoginScreenProps) {
   // Google AuthSession setup
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId: '407408718192.apps.googleusercontent.com',

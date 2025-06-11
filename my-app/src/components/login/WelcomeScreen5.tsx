@@ -15,7 +15,7 @@ import { SocialLogin } from './SocialLogin';
 import { NavigationDots } from './NavigationDots';
 import { HomeIndicator } from './HomeIndicator';
 
-const bookHeaderImage = require('../../assets/images/book-header.png');
+const bookHeaderImage = require('../../assets/images/login/book-header.png');
 const { width, height } = Dimensions.get('window');
 
 interface WelcomeScreen5Props {
@@ -38,7 +38,7 @@ export const WelcomeScreen5: React.FC<WelcomeScreen5Props> = ({
       styles.container,
       inOnboarding && { width, height, paddingHorizontal: 0, paddingVertical: 0 }
     ]}>
-      <StatusBar barStyle="dark-content" backgroundColor="#f5f3f0" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FCF3EC" />
       
       <ScrollView 
         style={styles.scrollView}
@@ -82,7 +82,7 @@ export default WelcomeScreen5;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f3f0',
+    backgroundColor: '#FCF3EC',
   },
   scrollView: {
     flex: 1,
@@ -100,11 +100,13 @@ const styles = StyleSheet.create({
   },
   bookHeaderContainer: {
     position: 'absolute',
-    width: Math.min(350, width * 0.9),
-    height: Math.min(220, height * 0.28),
-    right: -80,
+    //width: Math.min(350, width * 0.9),
+    //height: Math.min(220, height * 0.28),
+    width: 197.958,
+    height: 263.793,
+    right: -5,
     top: -10,
-    zIndex: 5,
+    zIndex: 15,
   },
   bookHeaderImage: {
     width: '100%',
@@ -114,34 +116,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 25,
     top: 30,
-    fontSize: Math.min(52, width * 0.13),
-    fontFamily: 'Bogart-Bold-Trial',
+    fontSize: 52,
+    fontFamily: 'Bogart-Bold-trial',
     color: '#EB4D2A',
-    fontWeight: 'bold',
-    fontStyle: 'italic',
-    zIndex: 10,
-    textShadowColor: 'rgba(235, 77, 42, 0.3)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 6,
-    transform: [{ rotate: '-3deg' }],
-    letterSpacing: 2,
+    fontWeight: 'normal',
+    zIndex: 5,
   },
   content: {
     paddingHorizontal: 30,
     paddingTop: 0,
   },
   title: {
-    fontSize: Math.min(48, width * 0.12),
-    fontFamily: 'Bogart-Bold-Trial',
+    fontSize: 48,
+    fontFamily: 'Bogart-Bold-trial',
     color: '#EB4D2A',
-    fontWeight: 'bold',
-    fontStyle: 'italic',
-    lineHeight: Math.min(54, width * 0.135),
-    letterSpacing: 1,
+    fontWeight: 'normal',
     marginBottom: 12,
-    textShadowColor: 'rgba(235, 77, 42, 0.15)',
-    textShadowOffset: { width: 1.5, height: 1.5 },
-    textShadowRadius: 3,
-    transform: [{ rotate: '-1deg' }],
   },
 });

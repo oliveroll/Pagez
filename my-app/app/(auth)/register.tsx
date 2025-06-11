@@ -24,7 +24,7 @@ export default function RegistrationScreen() {
     router.replace('/(auth)/create-profile' as any);
   };
 
-  const handleSocialLogin = (provider) => {
+  const handleSocialLogin = (provider: string) => {
     // Handle social login logic
     console.log(`Login with ${provider}`);
     router.replace('/(auth)/create-profile' as any);
@@ -40,7 +40,7 @@ export default function RegistrationScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#f5f3f0" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FCF3EC" />
       
       {/* Status Bar Indicator */}
       <View style={styles.statusIndicator} />
@@ -145,7 +145,7 @@ export default function RegistrationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f3f0', // Changed to match login screen background
+    backgroundColor: '#FCF3EC', // Changed to match phone verification background
   },
   statusIndicator: {
     position: 'absolute',
@@ -194,14 +194,15 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   title: {
-    fontFamily: 'Bogart-Bold-Trial',
-    fontSize: Math.min(32, width * 0.085), // Much larger title
-    fontWeight: 'bold',
     color: '#1E1E1E',
-    textAlign: 'center', // Centered like "Use phone number instead"
-    letterSpacing: -0.5,
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 28,
+    letterSpacing: -0.8,
+    textAlign: 'center',
     marginBottom: 40,
-    lineHeight: Math.min(38, width * 0.095),
   },
   inputContainer: {
     marginBottom: 20,
@@ -220,25 +221,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   phoneOption: {
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: 'bold',
     color: '#1E1E1E',
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 28,
+    letterSpacing: -0.8,
     textAlign: 'center',
-    letterSpacing: -0.5,
     marginTop: 30,
-    marginBottom: 100, // Much more space before social section
+    marginBottom: 100,
   },
   socialSection: {
     alignItems: 'center',
     marginBottom: 10,
   },
   socialTitle: {
-    fontFamily: 'Inter',
-    fontSize: 16,
-    fontWeight: 'bold',
     color: '#1E1E1E',
-    letterSpacing: -0.5,
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    lineHeight: 28,
+    letterSpacing: -0.8,
     marginBottom: 30,
   },
   socialButtonsContainer: {

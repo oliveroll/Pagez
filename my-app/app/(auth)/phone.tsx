@@ -33,7 +33,7 @@ export default function PhoneRegistrationScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#f5f3f0" />
+      <StatusBar barStyle="dark-content" backgroundColor="#FCF3EC" />
       
       {/* Status Bar Indicator */}
       <View style={styles.statusIndicator} />
@@ -85,7 +85,7 @@ export default function PhoneRegistrationScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f3f0', // Beige background like other screens
+    backgroundColor: '#FCF3EC', // Updated to match other screens
   },
   statusIndicator: {
     position: 'absolute',
@@ -134,14 +134,14 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   title: {
-    fontFamily: 'Bogart-Bold-Trial',
-    fontSize: Math.min(32, width * 0.085), // Large title like register screen
-    fontWeight: 'bold',
+    fontFamily: 'Inter',
+    fontSize: 20,
+    fontWeight: '600',
     color: '#1E1E1E',
     textAlign: 'center',
-    letterSpacing: -0.5,
+    letterSpacing: -0.8,
     marginBottom: 40,
-    lineHeight: Math.min(38, width * 0.095),
+    lineHeight: 28,
   },
   inputContainer: {
     marginBottom: 30,
