@@ -238,9 +238,9 @@ const BookCard = ({ book, size = 'medium' }) => {
         </View>
         
         {/* Book cover */}
-        <View style={styles.bookCover}>
+      <View style={styles.bookCover}>
           <Image source={book.coverImage} style={styles.coverImage} />
-        </View>
+          </View>
       </View>
       
       <View style={styles.bookInfo}>
@@ -284,10 +284,10 @@ export default function HomeScreen() {
           <TouchableOpacity style={styles.searchButton} onPress={() => router.push('/search')}>
             <SvgXml xml={SearchIcon} width={24} height={24} />
           </TouchableOpacity>
-          <Image 
+            <Image 
             source={require('../src/assets/images/homepage/profile.jpg')} 
-            style={styles.profileImage}
-          />
+              style={styles.profileImage}
+            />
         </View>
       </View>
 
