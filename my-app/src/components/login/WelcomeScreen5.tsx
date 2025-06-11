@@ -23,6 +23,7 @@ interface WelcomeScreen5Props {
   onSocialLogin?: (platform: string) => void;
   onUsePhone?: () => void;
   onJoinNow?: () => void;
+  onForgotPassword?: () => void;
   inOnboarding?: boolean;
 }
 
@@ -31,6 +32,7 @@ export const WelcomeScreen5: React.FC<WelcomeScreen5Props> = ({
   onSocialLogin,
   onUsePhone,
   onJoinNow,
+  onForgotPassword,
   inOnboarding
 }) => {
   return (
@@ -61,6 +63,7 @@ export const WelcomeScreen5: React.FC<WelcomeScreen5Props> = ({
           <LoginForm 
             onLogin={onLogin}
             onUsePhone={onUsePhone}
+            onForgotPassword={onForgotPassword}
           />
 
           <SocialLogin 

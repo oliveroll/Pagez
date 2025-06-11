@@ -1,0 +1,387 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Pagez MVP Implementation Rules
+
+## MVP Scope Overview
+Frontend-only React Native (Expo) app with mock data. No Firebase integration required.
+
+**Core Features**: Authentication, Book Discovery, Reading Lists, Reader, Community Feed, Author Dashboard, Author Notes
+
+## Authentication Implementation
+
+### Required Auth Screens
+```
+app/(auth)/
+├── login.tsx           # Email/password + social login
+├── register.tsx        # Account creation
+├── forgot-password.tsx # Password reset
+└── create-profile.tsx  # Profile setup after auth
+```
+
+### Auth Flow Pattern
+```typescript
+// Mock authentication service
+export const authService = {
+  loginWithEmail: async (email: string, password: string) => {
+    // Return mock user data
+    return { user: mockUser, token: 'mock-token' };
+  },
+  loginWithGoogle: async () => {
+    // Mock Google auth
+    return { user: mockGoogleUser, token: 'mock-token' };
+  },
+  loginWithApple: async () => {
+    // Mock Apple auth  
+    return { user: mockAppleUser, token: 'mock-token' };
+  }
+};
+```
+
+### Profile Setup Requirements
+- Profile picture upload (mock with expo-image-picker)
+- Display name (required)
+- Username (required, unique check with mock validation)
+- Bio (optional)
+
+## Book Discovery & Search
+
+### Discovery Feed Structure
+```typescript
+interface BookFeed {
+  trending: Book[];
+  recommended: Book[];
+  newReleases: Book[];
+  genres: Genre[];
+}
+
+// Mock data structure
+const mockBookFeed = {
+  trending: [...trendingBooks],
+  recommended: [...recommendedBooks],
+  newReleases: [...newBooks]
+};
+```
+
+### Search Implementation
+```typescript
+// app/search/index.tsx
+const searchBooks = (query: string) => {
+  return mockBooks.filter(book => 
+    book.title.toLowerCase().includes(query.toLowerCase()) ||
+    book.author.toLowerCase().includes(query.toLowerCase())
+  );
+};
+```
+
+### Required Search Features
+- Search by title (partial match)
+- Search by author (partial match)  
+- Search results with book cards
+- Empty state for no results
+
+## Reading List System
+
+### Reading List Data Structure
+```typescript
+interface ReadingList {
+  id: string;
+  userId: string;
+  name: string;
+  description?: string;
+  books: Book[];
+  isDefault: boolean; // "Want to Read", "Currently Reading", "Read"
+  createdAt: string;
+  updatedAt: string;
+}
+```
+
+### Default Lists (Auto-created)
+- "Want to Read" (isDefault: true)
+- "Currently Reading" (isDefault: true)  
+- "Read" (isDefault: true)
+
+### List Management Actions
+```typescript
+const readingListActions = {
+  createList: (name: string, description?: string) => {},
+  addBookToList: (listId: string, book: Book) => {},
+  removeBookFromList: (listId: string, bookId: string) => {},
+  deleteList: (listId: string) => {}, // Only custom lists
+  editList: (listId: string, updates: Partial<ReadingList>) => {}
+};
+```
+
+## Immersive Reading Experience
+
+### Reader Screen Structure
+```
+app/reader/
+├── [bookId].tsx        # Main reader screen
+└── components/
+    ├── ReaderView.tsx  # Text display component
+    ├── Highlight.tsx   # Highlight overlay
+    └── QuoteShare.tsx  # Share/copy functionality
+```
+
+### Reading Experience Features
+```typescript
+interface Highlight {
+  id: string;
+  bookId: string;
+  userId: string;
+  text: string;
+  color: 'yellow' | 'green' | 'blue' | 'pink';
+  startPosition: number;
+  endPosition: number;
+  createdAt: string;
+}
+
+// Required highlight actions
+const highlightActions = {
+  createHighlight: (text: string, color: string) => {},
+  deleteHighlight: (highlightId: string) => {},
+  shareQuote: (highlight: Highlight) => {},
+  copyQuote: (highlight: Highlight) => {}
+};
+```
+
+### Mock Book Content
+- Use placeholder text (Lorem ipsum or sample book chapters)
+- Implement text selection for highlighting
+- Color picker for highlight options
+
+## Community Feed
+
+### Post Data Structure
+```typescript
+interface CommunityPost {
+  id: string;
+  userId: string;
+  bookId?: string; // Optional book link
+  content: string;
+  imageUri?: string; // Optional image
+  likes: number;
+  likedBy: string[]; // User IDs
+  comments: Comment[];
+  createdAt: string;
+}
+
+interface Comment {
+  id: string;
+  userId: string;
+  postId: string;
+  content: string;
+  createdAt: string;
+}
+```
+
+### Feed Implementation
+```
+app/community/
+├── index.tsx           # Main community feed
+├── create-post.tsx     # Post creation
+└── components/
+    ├── PostCard.tsx    # Individual post display
+    ├── CommentList.tsx # Comments section
+    └── LikeButton.tsx  # Like interaction
+```
+
+### Required Community Features
+- Create text posts (with optional book link)
+- Add optional image to posts
+- Like/unlike posts
+- Comment on posts
+- Display user profiles in posts
+
+## Author Dashboard
+
+### Author Features Toggle
+```typescript
+interface User {
+  // ... existing fields
+  isAuthor: boolean;
+  authorProfile?: {
+    bio: string;
+    website?: string;
+    booksPublished: Book[];
+  };
+}
+```
+
+### Author Dashboard Structure
+```
+app/author/
+├── dashboard.tsx       # Author overview
+├── books/
+│   ├── index.tsx      # Books management
+│   ├── create.tsx     # Add new book
+│   └── [id]/edit.tsx  # Edit existing book
+└── notes/
+    ├── index.tsx      # Notes management
+    └── [bookId].tsx   # Notes for specific book
+```
+
+### Book Management
+```typescript
+interface AuthorBook {
+  id: string;
+  authorId: string;
+  title: string;
+  description: string;
+  coverImageUri?: string;
+  isbn?: string;
+  publishedDate?: string;
+  status: 'draft' | 'published';
+  notes: AuthorNote[];
+}
+```
+
+## Author Notes System
+
+### Notes Data Structure
+```typescript
+interface AuthorNote {
+  id: string;
+  bookId: string;
+  authorId: string;
+  title: string;
+  content: string;
+  isPublic: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+```
+
+### Notes Implementation
+- Rich text editor for note content
+- Public/private visibility toggle
+- Notes linked to specific books
+- Display notes in book detail view
+
+## Navigation Structure
+
+### Tab Navigation
+```typescript
+// app/(tabs)/_layout.tsx
+const tabs = [
+  { name: 'Home', icon: 'home', screen: 'index' },
+  { name: 'Search', icon: 'search', screen: 'search' },
+  { name: 'Library', icon: 'library', screen: 'library' },
+  { name: 'Community', icon: 'users', screen: 'community' },
+  { name: 'Profile', icon: 'user', screen: 'profile' }
+];
+```
+
+### Screen Hierarchy
+```
+(tabs)/
+├── index.tsx          # Home/Discovery feed
+├── search/            # Book search
+├── library/           # Reading lists
+├── community/         # Social feed
+└── profile/           # User profile + author dashboard
+```
+
+## Mock Data Requirements
+
+### Essential Mock Data Files
+```
+src/data/
+├── users.ts           # Sample users (readers + authors)
+├── books.ts           # Sample book catalog
+├── readingLists.ts    # Sample reading lists
+├── posts.ts           # Sample community posts
+├── highlights.ts      # Sample highlights
+└── authorNotes.ts     # Sample author notes
+```
+
+### Data Relationships
+- Users have reading lists
+- Posts can link to books
+- Highlights belong to users and books
+- Author notes belong to authors and books
+- Comments belong to posts and users
+
+## UI Component Standards
+
+### Required Reusable Components
+```
+src/components/
+├── BookCard.tsx       # Book display card
+├── UserAvatar.tsx     # Profile picture component
+├── PostCard.tsx       # Community post display
+├── ReadingListCard.tsx # List display
+├── SearchBar.tsx      # Search input
+├── TabBar.tsx         # Custom tab navigation
+└── LoadingSpinner.tsx # Loading states
+```
+
+### Component Props Pattern
+```typescript
+interface BookCardProps {
+  book: Book;
+  onPress: (book: Book) => void;
+  showAuthor?: boolean;
+  variant?: 'small' | 'medium' | 'large';
+}
+```
+
+## Error Handling & Edge Cases
+
+### Required Error States
+- No internet connection
+- Empty search results
+- Empty reading lists
+- No community posts
+- Failed image uploads
+
+### Loading States
+- Book discovery feed loading
+- Search results loading
+- Reading list loading
+- Post submission loading
+- Profile update loading
+
+## Testing Checklist
+
+### Core User Flows
+- [ ] Complete authentication flow
+- [ ] Create and manage reading lists
+- [ ] Search and discover books
+- [ ] Read book with highlighting
+- [ ] Create and interact with posts
+- [ ] Switch to author mode (if applicable)
+- [ ] Create and manage author notes
+
+### Edge Cases
+- [ ] Long book titles/descriptions
+- [ ] Large reading lists
+- [ ] Multiple highlights per page
+- [ ] Posts without images
+- [ ] Author with no published books
+
+## Development Priority
+
+### Phase 1 (Core App)
+1. Authentication screens
+2. Basic navigation structure
+3. Book discovery feed
+4. Reading lists management
+
+### Phase 2 (Reading Experience)
+1. Reader implementation
+2. Highlighting system
+3. Quote sharing
+
+### Phase 3 (Social Features)
+1. Community feed
+2. Post creation/interaction
+3. User profiles
+
+### Phase 4 (Author Features)
+1. Author dashboard
+2. Book management
+3. Author notes system

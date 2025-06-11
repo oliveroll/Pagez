@@ -243,6 +243,10 @@ export interface AuthContextType {
   register: (form: RegisterForm) => Promise<void>;
   logout: () => Promise<void>;
   updateProfile: (updates: Partial<User>) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
+  loginWithApple: () => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  checkUsernameAvailability: (username: string) => Promise<boolean>;
 }
 
 export interface BooksContextType {

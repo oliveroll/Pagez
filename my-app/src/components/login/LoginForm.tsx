@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
+  Image,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -14,16 +15,29 @@ const { width } = Dimensions.get('window');
 interface LoginFormProps {
   onLogin?: (username: string, password: string) => void;
   onUsePhone?: () => void;
+  onForgotPassword?: () => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onUsePhone }) => {
+export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onUsePhone, onForgotPassword }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const handleLogin = () => {
     if (onLogin) {
-      onLogin(username, password);
+      // Show error for demo purposes when using "wrong" credentials
+      if (username.toLowerCase() === 'examplemodel' || !username.trim() || !password.trim()) {
+        setShowError(true);
+      } else {
+        setShowError(false);
+        onLogin(username, password);
+      }
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -49,9 +63,33 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLogin, onUsePhone }) => 
           placeholderTextColor="#BBAEA8"
           value={password}
           onChangeText={setPassword}
-          secureTextEntry
+          secureTextEntry={!showPassword}
           autoCapitalize="none"
         />
+        <TouchableOpacity 
+          style={styles.eyeIcon} 
+          onPress={togglePasswordVisibility}
+        >
+          <Image 
+            source={require('../../assets/images/login/Invisible.png')} 
+            style={[styles.eyeImage, { opacity: showPassword ? 0.5 : 1 }]}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
+      </View>
+
+      {/* Error Message */}
+      {showError && (
+        <Text style={styles.errorText}>
+          Username or email not registered to an account
+        </Text>
+      )}
+
+      {/* Forgot Password Link - Positioned Right */}
+      <View style={styles.forgotPasswordContainer}>
+        <TouchableOpacity onPress={onForgotPassword} style={styles.forgotPasswordLink}>
+          <Text style={styles.forgotPasswordText}>Forgot Password</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Login Button */}
@@ -81,8 +119,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   input: {
+    flex: 1,
     fontSize: 16,
     fontFamily: 'Bogart-Medium-trial',
     fontWeight: 'normal',
@@ -118,5 +159,44 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 28,
     letterSpacing: -0.8,
+  },
+  eyeIcon: {
+    padding: 8,
+  },
+  eyeImage: {
+    width: 20,
+    height: 20,
+  },
+  errorText: {
+    color: '#DD1313',
+    fontFamily: 'Inter',
+    fontSize: 10,
+    fontStyle: 'italic',
+    fontWeight: '700',
+    lineHeight: 28,
+    letterSpacing: -0.4,
+    marginBottom: 8,
+    marginTop: -4,
+  },
+  forgotPasswordContainer: {
+    width: '100%',
+    alignItems: 'flex-end',
+    marginBottom: 20,
+    marginRight: 0, // Remove any margin to align with login button
+  },
+  forgotPasswordLink: {
+    alignItems: 'flex-end',
+    marginRight: 0, // Tight alignment with login button right edge
+  },
+  forgotPasswordText: {
+    color: '#DD1313',
+    textAlign: 'right',
+    fontFamily: 'Inter',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '400',
+    lineHeight: 28,
+    letterSpacing: -0.48,
+    textDecorationLine: 'underline',
   },
 });

@@ -3,95 +3,42 @@ description:
 globs: 
 alwaysApply: true
 ---
-# Pagez - React Native (Expo) Book Discovery Platform
+# Pagez - React Native Book Platform Rules
 
-## Project Overview
-Pagez is a comprehensive book discovery and reading platform built with React Native and Expo. It combines social reading features with author tools and immersive reading experiences.
+## Project Context
+React Native (Expo) book discovery platform with authentication, reading lists, and community features.
 
-### Core Features
-- User authentication (Email/Password, Google, Apple)
-- Book discovery feed with trending/recommended books
-- Reading list management system
-- Immersive embedded reader with highlighting
-- Community posts and interactions
-- Author dashboard for book management
-- Author notes system
+**Tech Stack**: React Native 0.79.1, Expo ^53.0.4, TypeScript ~5.8.3, Expo Router
 
-## Tech Stack & Dependencies
-
-### Primary Technologies
-- **React Native**: 0.79.1
-- **Expo**: ^53.0.4 with Expo Router for navigation
-- **TypeScript**: ~5.8.3
-- **React**: 19.0.0
-
-### Key Libraries
-- **Navigation**: @react-navigation/native, expo-router
-- **UI/UX**: react-native-reanimated, react-native-gesture-handler, expo-linear-gradient
-- **Icons**: @expo/vector-icons, react-native-vector-icons
-- **Authentication**: expo-auth-session, expo-web-browser
-- **Media**: expo-image-picker, react-native-svg
-- **Utilities**: expo-constants, expo-linking, expo-random
-
-## Project Structure
-
+## File Organization
 ```
 my-app/
-├── app/                          # Expo Router file-based routing
-│   ├── (auth)/                   # Auth group routes
-│   ├── author/                   # Author-specific routes
-│   │   └── notes/               # Author notes management
-│   ├── profile/                 # User profile routes
-│   │   └── create-author/       # Author onboarding
-│   ├── search/                  # Search functionality
-│   ├── _layout.tsx             # Root layout component
-│   ├── index.tsx               # Entry point
-│   ├── setup.tsx               # User setup/onboarding
-│   ├── onboarding.tsx          # App onboarding
-│   ├── home.tsx                # Home/discovery feed
-│   ├── library.tsx             # User's reading lists
-│   ├── community.tsx           # Community posts feed
-│   └── book-more.tsx           # Book details view
+├── app/                    # Expo Router (file-based routing)
+│   ├── (auth)/            # Auth group routes  
+│   ├── author/            # Author features
+│   ├── profile/           # User profiles
+│   └── *.tsx              # Main app screens
 ├── src/
-│   ├── assets/                 # Static assets
-│   │   ├── fonts/             # Custom fonts
-│   │   └── images/            # Images and icons
-│   ├── components/            # Reusable React components
-│   │   └── filters/           # Filter-related components
-│   ├── constants/             # App constants and configurations
-│   ├── context/               # React Context providers
-│   └── utils/                 # Utility functions and helpers
-├── package.json               # Dependencies and scripts
-├── app.json                   # Expo configuration
-├── tsconfig.json             # TypeScript configuration
-└── README.md                 # Project documentation
+│   ├── assets/fonts/      # Bogart font family
+│   ├── assets/images/     # PNG/SVG assets
+│   ├── components/        # Reusable components
+│   ├── constants/         # App constants
+│   └── utils/             # Helper functions
 ```
 
-## Coding Standards & Conventions
+## Naming Conventions
+- **Components**: `BookCard.tsx`, `ReadingList.tsx` (PascalCase)
+- **Routes**: `create-profile.tsx`, `book-details.tsx` (kebab-case)  
+- **Utils**: `formatDate.ts`, `bookHelpers.ts` (camelCase)
+- **Constants**: `COLORS.ts`, `API_ENDPOINTS.ts` (SCREAMING_SNAKE_CASE)
 
-### File Naming
-- **Components**: PascalCase (e.g., `BookCard.tsx`, `ReadingList.tsx`)
-- **Pages/Routes**: kebab-case (e.g., `book-details.tsx`, `create-author.tsx`)
-- **Utilities**: camelCase (e.g., `formatDate.ts`, `bookHelpers.ts`)
-- **Constants**: SCREAMING_SNAKE_CASE (e.g., `API_ENDPOINTS.ts`, `COLORS.ts`)
+## Component Standards
 
-### TypeScript Guidelines
-- Always use TypeScript for type safety
-- Define interfaces for all data structures
-- Use proper typing for React components and props
-- Avoid `any` type - use specific types or `unknown`
-- Export types alongside components when needed
-
-### Component Structure
+### Required Structure
 ```typescript
-// Component imports
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-// Type imports
-import type { ComponentProps } from './types';
-
-// Component definition
 interface Props {
   title: string;
   onPress?: () => void;
@@ -105,231 +52,187 @@ export const ComponentName: React.FC<Props> = ({ title, onPress }) => {
   );
 };
 
-// Styles at bottom
 const styles = StyleSheet.create({
-  container: {
-    // styles
-  },
-  title: {
-    // styles
-  },
+  container: { /* styles */ },
+  title: { /* styles */ },
 });
 ```
 
-### State Management
-- Use React Context for global state
-- useState for local component state
-- Custom hooks for shared logic
-- Keep state as close to where it's used as possible
+### TypeScript Requirements
+- ✅ Always use TypeScript interfaces
+- ✅ Export types with components
+- ❌ Never use `any` - use `unknown` instead
+- ✅ Define props interfaces for all components
 
-### Styling Guidelines
-- Use StyleSheet.create() for all styles
-- Follow consistent naming: container, wrapper, content, title, subtitle, etc.
-- Use theme colors from constants
-- Responsive design considerations for different screen sizes
-- Consistent spacing and typography scale
+## Font Implementation
 
-## Expo Router Conventions
+### Bogart Font Usage
+Use exact font file names from `src/assets/fonts/`:
+```typescript
+// ✅ Correct
+fontFamily: 'Bogart-Medium-trial'
+fontFamily: 'Bogart-Semibold-trial'
+fontFamily: 'Bogart-Bold-trial'
 
-### Route Organization
-- Use file-based routing with Expo Router
-- Group related routes in folders
-- Use `(auth)` for authentication-related routes (group routes)
-- Use `_layout.tsx` for shared layouts
-- Dynamic routes: `[id].tsx` or `[...slug].tsx`
+// ❌ Wrong  
+fontFamily: 'Bogart Trial'
+fontFamily: 'Bogart'
+```
 
-### Navigation Patterns
+**Available fonts**: Regular, Medium, Semibold, Bold, Light, Thin, Black (all with -trial suffix)
+
+## Styling Rules
+
+### Style Organization
+```typescript
+const styles = StyleSheet.create({
+  // Layout containers
+  container: { flex: 1, backgroundColor: '#FCF3EC' },
+  content: { paddingHorizontal: 30 },
+  
+  // Text elements
+  title: { fontSize: 64, fontFamily: 'Bogart-Semibold-trial' },
+  subtitle: { fontSize: 34, fontFamily: 'Bogart-Medium-trial' },
+  
+  // Interactive elements  
+  button: { height: 55, borderRadius: 28 },
+});
+```
+
+### Color Standards
+- **Primary Orange**: `#EB4D2A`
+- **Background Cream**: `#FCF3EC` 
+- **Text Light**: `#FCF3EC` (on dark backgrounds)
+- **Text Dark**: `#1E1E1E` (on light backgrounds)
+- **Border Gray**: `#BBAEA8`
+
+## Navigation Patterns
+
+### Expo Router Usage
 ```typescript
 import { router } from 'expo-router';
 
-// Navigate to a route
+// Navigation
 router.push('/book-details/123');
-
-// Replace current route
 router.replace('/login');
-
-// Go back
 router.back();
+
+// Group routes: (auth), (tabs)
+// Dynamic routes: [id].tsx, [...slug].tsx
 ```
 
-## Data & API Integration
+### Route Structure
+- `(auth)/` - Authentication screens
+- `author/` - Author-specific features
+- `profile/` - User profile management
 
-### Mock Data Structure
-Since this is frontend-only, use comprehensive mock data:
+## Image Assets
 
+### Import Patterns
 ```typescript
-// Book interface
+// ✅ Relative paths for images
+source={require('../../src/assets/images/onboarding/paper1.png')}
+
+// ✅ SVG with react-native-svg
+import { SvgXml } from 'react-native-svg';
+```
+
+### Onboarding Assets
+- Use `Group_paper_up.png` and `Group paper_down.png` for decorative backgrounds
+- Paper images: `paper1.png` through `paper9.png` available
+
+## Development Workflow
+
+### Terminal Commands
+Always navigate to project directory first:
+```bash
+cd my-app
+npx expo start
+```
+
+### State Management
+- **Global**: React Context
+- **Local**: useState hooks  
+- **Shared Logic**: Custom hooks
+- Keep state close to usage
+
+### Performance
+- Use `FlatList` for large data sets
+- Implement `React.memo` for expensive components
+- Optimize images with proper sizing
+- Clean up subscriptions in `useEffect`
+
+## Data Structures
+
+### Core Interfaces
+```typescript
 interface Book {
   id: string;
   title: string;
   author: string;
   coverUrl: string;
-  description: string;
-  isbn?: string;
-  publishedDate: string;
   genres: string[];
   rating: number;
-  totalRatings: number;
 }
 
-// User interface
 interface User {
   id: string;
   email: string;
   displayName: string;
   username: string;
-  profilePicture?: string;
   isAuthor: boolean;
-  createdAt: string;
-}
-
-// Reading List interface
-interface ReadingList {
-  id: string;
-  userId: string;
-  name: string;
-  description?: string;
-  books: Book[];
-  isPublic: boolean;
-  createdAt: string;
-  updatedAt: string;
 }
 ```
 
-### Firebase Integration Planning
-Document Firebase structure for backend implementation:
-- Authentication: Email/Password, Google, Apple
-- Firestore Collections: users, books, readingLists, posts, comments, highlights
-- Storage: User profile pictures, book covers, post images
+## Error Handling
 
-## Feature Implementation Guidelines
+### TypeScript Config
+- Set `moduleResolution: "node"` (not bundler)
+- Avoid `customConditions` errors
+- Use relative imports for assets
 
-### Authentication Flow
-1. Splash screen with app branding
-2. Onboarding screens (3-4 slides)
-3. Sign up/Sign in options
-4. Profile setup (picture, display name, username)
-5. Optional author account creation
+### Common Fixes
+- Font issues: Use exact font file names
+- Import errors: Use relative paths `../../src/`
+- Route errors: Check file-based routing structure
 
-### Book Discovery
-- Trending books feed
-- Personalized recommendations
-- Search functionality (title, author, genre)
-- Book details with community features
-- Add to reading lists functionality
+## Design System
 
-### Reading Experience
-- Embedded reader component
-- Text highlighting with color options
-- Quote sharing functionality
-- Reading progress tracking
-- Bookmark system
+### Text Styling Examples
+```typescript
+// Welcome screen text
+welcomeGreeting: {
+  fontSize: 34,
+  fontFamily: 'Bogart-Medium-trial',
+  color: '#FCF3EC',
+  letterSpacing: -0.68,
+}
 
-### Community Features
-- Post creation (text + optional image)
-- Book-linked posts
-- Like and comment system
-- User profiles with reading activity
-- Following/follower system (future enhancement)
+welcomeTitle: {
+  fontSize: 64, 
+  fontFamily: 'Bogart-Semibold-trial',
+  color: '#FCF3EC',
+  letterSpacing: -1.28,
+}
+```
 
-### Author Tools
-- Book management dashboard
-- Add/edit book information
-- Author notes creation and management
-- Analytics dashboard (basic stats)
+### Layout Patterns
+- Use `SafeAreaView` for screen containers
+- Center content with `justifyContent: 'center'`
+- Consistent padding: `paddingHorizontal: 30`
+- Button height: `55px` with `borderRadius: 28`
 
-## Performance Considerations
+## Testing & Quality
 
-### Optimization Strategies
-- Use FlatList for large data sets
-- Implement image lazy loading
-- Use React.memo for expensive components
-- Optimize re-renders with proper dependency arrays
-- Use Expo's built-in performance monitoring
+### Pre-commit Checklist
+- [ ] TypeScript errors resolved
+- [ ] Proper font family names used
+- [ ] Relative paths for imports
+- [ ] Consistent naming conventions
+- [ ] Styles use StyleSheet.create()
 
-### Memory Management
-- Properly dispose of listeners
-- Clean up subscriptions in useEffect
-- Optimize image sizes and formats
-- Use caching strategies for frequently accessed data
-
-## Testing Strategy
-
-### Component Testing
-- Unit tests for utility functions
-- Component testing with React Native Testing Library
-- Mock external dependencies
-- Test user interactions and navigation
-
-### Integration Testing
-- Test complete user flows
-- Authentication flow testing
-- Navigation testing
-- API integration testing (when backend is ready)
-
-## Development Workflow
-
-### Git Conventions
-- Feature branches: `feature/book-discovery`
-- Bug fixes: `fix/authentication-issue`
-- Hotfixes: `hotfix/critical-bug`
-- Commit messages: Conventional Commits format
-
-### Code Review Process
-1. Self-review before creating PR
-2. Ensure all tests pass
-3. Check for TypeScript errors
-4. Verify mobile responsiveness
-5. Test on both iOS and Android simulators
-
-## Deployment & Build
-
-### Expo Configuration
-- Development builds for testing
-- Preview builds for stakeholder review
-- Production builds for app stores
-- Over-the-air updates for minor changes
-
-### Environment Management
-- Development environment setup
-- Staging environment for testing
-- Production environment configuration
-- Environment-specific constants
-
-## Future Enhancements
-
-### Planned Features
-- Push notifications for community interactions
-- Offline reading capability
-- Advanced search filters
-- Book recommendations AI
-- Social features expansion
-- Web platform development
-
-### Technical Debt Considerations
-- Regular dependency updates
-- Performance optimization reviews
-- Code refactoring for maintainability
-- Documentation updates
-- Security audit considerations
-
-## Resources & Documentation
-
-### Key Documentation Links
-- [Expo Documentation](https://docs.expo.dev/)
-- [React Native Documentation](https://reactnative.dev/docs/getting-started)
-- [Expo Router Documentation](https://expo.github.io/router/docs/)
-- [React Navigation](https://reactnavigation.org/docs/getting-started)
-
-### Design System
-- Follow Material Design 3 principles for Android
-- Follow Human Interface Guidelines for iOS
-- Consistent color palette and typography
-- Accessible design practices
-- Dark mode support (future enhancement)
-
-## Contact & Support
-- Project Lead: [Contact Information]
-- Technical Documentation: [Google Document Link]
-- Repository: [GitHub Repository Link]
-- Issue Tracking: [Issue Tracker Link] 
+### Build Verification
+- [ ] `npx expo start` runs successfully
+- [ ] No import/require errors
+- [ ] Fonts render correctly
+- [ ] Navigation works as expected

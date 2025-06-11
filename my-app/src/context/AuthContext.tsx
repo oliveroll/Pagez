@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { router } from 'expo-router';
 import { AuthContextType, LoginForm, RegisterForm, User } from '../types';
-import { MOCK_USERS } from '../constants/mockData';
+import { authService } from '../services/authService';
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -43,15 +43,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (form: LoginForm): Promise<void> => {
     setIsLoading(true);
     try {
-      // Mock login - find user by email
-      const mockUser = MOCK_USERS.find(u => u.email === form.email);
-      if (mockUser && form.password === 'password') { // Mock password check
-        setUser(mockUser);
-        setIsAuthenticated(true);
-        // TODO: Store user ID in AsyncStorage for persistence in real app
-      } else {
-        throw new Error('Invalid credentials');
-      }
+      const response = await authService.loginWithEmail(form.email, form.password);
+      setUser(response.user);
+      setIsAuthenticated(true);
+      // TODO: Store tokens in AsyncStorage for persistence in real app
+      // localStorage.setItem('authToken', response.token);
+      // localStorage.setItem('refreshToken', response.refreshToken);
     } catch (error) {
       throw error;
     } finally {
@@ -62,36 +59,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = async (form: RegisterForm): Promise<void> => {
     setIsLoading(true);
     try {
-      // Mock registration - create new user
-      const newUser: User = {
-        id: `user-${Date.now()}`,
-        email: form.email,
-        displayName: form.displayName,
-        username: form.username,
-        isAuthor: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        preferences: {
-          favoriteGenres: [],
-          notificationsEnabled: true,
-          privacySettings: {
-            profileVisibility: 'public',
-            readingListsVisibility: 'public',
-            activityVisibility: 'friends',
-          },
-        },
-        stats: {
-          totalBooksRead: 0,
-          currentlyReading: 0,
-          totalReadingLists: 0,
-          followersCount: 0,
-          followingCount: 0,
-        },
-      };
-
-      setUser(newUser);
+      const response = await authService.register(form);
+      setUser(response.user);
       setIsAuthenticated(true);
-      // TODO: Store user ID in AsyncStorage for persistence in real app
+      // TODO: Store tokens in AsyncStorage for persistence in real app
+      // localStorage.setItem('authToken', response.token);
+      // localStorage.setItem('refreshToken', response.refreshToken);
     } catch (error) {
       throw error;
     } finally {
@@ -102,13 +75,63 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = async (): Promise<void> => {
     setIsLoading(true);
     try {
+      await authService.logout();
       setUser(null);
       setIsAuthenticated(false);
       // TODO: Clear stored auth from AsyncStorage in real app
+      // localStorage.removeItem('authToken');
+      // localStorage.removeItem('refreshToken');
     } catch (error) {
       throw error;
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loginWithGoogle = async (): Promise<void> => {
+    setIsLoading(true);
+    try {
+      const response = await authService.loginWithGoogle();
+      setUser(response.user);
+      setIsAuthenticated(true);
+      // TODO: Store tokens in AsyncStorage for persistence in real app
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loginWithApple = async (): Promise<void> => {
+    setIsLoading(true);
+    try {
+      const response = await authService.loginWithApple();
+      setUser(response.user);
+      setIsAuthenticated(true);
+      // TODO: Store tokens in AsyncStorage for persistence in real app
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const forgotPassword = async (email: string): Promise<void> => {
+    setIsLoading(true);
+    try {
+      await authService.forgotPassword(email);
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const checkUsernameAvailability = async (username: string): Promise<boolean> => {
+    try {
+      return await authService.checkUsernameAvailability(username);
+    } catch (error) {
+      return false;
     }
   };
 
@@ -138,6 +161,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     register,
     logout,
     updateProfile,
+    loginWithGoogle,
+    loginWithApple,
+    forgotPassword,
+    checkUsernameAvailability,
   };
 
   return (

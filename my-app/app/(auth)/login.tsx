@@ -51,12 +51,17 @@ export default function LoginScreen({ inOnboarding }: LoginScreenProps) {
     router.replace('/(auth)/register');
   };
 
+  const handleForgotPassword = () => {
+    router.push('/(auth)/forgot-password');
+  };
+
   return (
     <WelcomeScreen5
       onLogin={handleLogin}
       onSocialLogin={handleSocialLogin}
       onUsePhone={handleUsePhone}
       onJoinNow={handleJoinNow}
+      onForgotPassword={handleForgotPassword}
       inOnboarding={inOnboarding}
     />
   );

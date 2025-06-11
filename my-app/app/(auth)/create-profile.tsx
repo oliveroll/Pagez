@@ -15,13 +15,16 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { useAuth } from '../../src/context/AuthContext';
 
 export default function CreateProfileScreen() {
+  const { checkUsernameAvailability } = useAuth();
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const [showAuthorOption, setShowAuthorOption] = useState(false);
   const [showFinalOnboarding, setShowFinalOnboarding] = useState(false);
+  const [isCheckingUsername, setIsCheckingUsername] = useState(false);
 
   const handleImagePicker = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -43,7 +46,7 @@ export default function CreateProfileScreen() {
     }
   };
 
-  const handleCreateAccount = () => {
+  const handleCreateAccount = async () => {
     if (!name.trim()) {
       Alert.alert('Name required', 'Please enter your name to continue.');
       return;
@@ -52,6 +55,27 @@ export default function CreateProfileScreen() {
     if (!username.trim()) {
       Alert.alert('Username required', 'Please enter a username to continue.');
       return;
+    }
+
+    // Username validation
+    if (username.length < 3) {
+      Alert.alert('Invalid username', 'Username must be at least 3 characters');
+      return;
+    }
+
+    // Check username availability
+    setIsCheckingUsername(true);
+    try {
+      const isAvailable = await checkUsernameAvailability(username);
+      if (!isAvailable) {
+        Alert.alert('Username taken', 'This username is already taken. Please choose another one.');
+        return;
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Unable to check username availability. Please try again.');
+      return;
+    } finally {
+      setIsCheckingUsername(false);
     }
 
     // Show author account option after basic profile is complete
@@ -85,7 +109,7 @@ export default function CreateProfileScreen() {
     setShowFinalOnboarding(true);
   };
 
-  const isFormValid = name.trim() !== '' && username.trim() !== '';
+  const isFormValid = name.trim() !== '' && username.trim() !== '' && !isCheckingUsername;
 
   // Show final onboarding screen
   if (showFinalOnboarding) {
@@ -278,7 +302,9 @@ export default function CreateProfileScreen() {
             onPress={handleCreateAccount}
             disabled={!isFormValid}
           >
-              <Text style={styles.createAccountText}>Continue</Text>
+              <Text style={styles.createAccountText}>
+                {isCheckingUsername ? 'Checking...' : 'Continue'}
+              </Text>
           </TouchableOpacity>
         </View>
       </View>
