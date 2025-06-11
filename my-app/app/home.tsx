@@ -56,8 +56,88 @@ const ThumbsUpIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none
 </defs>
 </svg>`;
 
+const GlassesIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_4_2663)">
+<path d="M20.4749 14.0251C21.8417 15.3919 21.8417 17.608 20.4749 18.9748C19.108 20.3417 16.892 20.3417 15.5251 18.9748C14.1583 17.608 14.1583 15.3919 15.5251 14.0251C16.892 12.6583 19.108 12.6583 20.4749 14.0251Z" fill="#FE772A" fill-opacity="0.22" stroke="#EB4D2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M17.9031 4L19.5741 5.142C20.0561 5.471 20.3701 5.995 20.4341 6.576L21.4641 16" stroke="#EB4D2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8.47488 14.0251C9.84172 15.3919 9.84172 17.608 8.47488 18.9748C7.10804 20.3417 4.89197 20.3417 3.52513 18.9748C2.15829 17.608 2.15829 15.3919 3.52513 14.0251C4.89197 12.6583 7.10804 12.6583 8.47488 14.0251Z" fill="#FE772A" fill-opacity="0.22" stroke="#EB4D2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9.5 16.473C9.5 15.161 10.619 14.098 12 14.098C13.381 14.098 14.5 15.161 14.5 16.473" stroke="#EB4D2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M6.09701 4L4.42601 5.142C3.94401 5.471 3.63001 5.995 3.56701 6.576L2.53601 16" stroke="#EB4D2A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_4_2663">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>`;
+
+const ProgressIcon = `<svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.5 2C8.22227 2 8.93747 2.14226 9.60476 2.41866C10.272 2.69506 10.8784 3.10019 11.3891 3.61091C11.8998 4.12164 12.3049 4.72795 12.5813 5.39524C12.8577 6.06253 13 6.77773 13 7.5C13 8.22227 12.8577 8.93747 12.5813 9.60476C12.3049 10.2721 11.8998 10.8784 11.3891 11.3891C10.8784 11.8998 10.272 12.3049 9.60476 12.5813C8.93747 12.8577 8.22227 13 7.5 13C6.77773 13 6.06253 12.8577 5.39524 12.5813C4.72795 12.3049 4.12163 11.8998 3.61091 11.3891C3.10019 10.8784 2.69506 10.272 2.41866 9.60476C2.14226 8.93747 2 8.22227 2 7.5C2 6.77773 2.14226 6.06253 2.41866 5.39524C2.69506 4.72795 3.10019 4.12163 3.61091 3.61091C4.12164 3.10019 4.72795 2.69506 5.39524 2.41866C6.06254 2.14226 6.77773 2 7.5 2L7.5 2Z" stroke="url(#paint0_linear_8_742)" stroke-width="3"/>
+<path d="M7.5 2C8.49465 2 9.47068 2.26973 10.3242 2.78046C11.1777 3.2912 11.8767 4.02383 12.3468 4.90036C12.817 5.77688 13.0406 6.76449 12.9939 7.75804C12.9473 8.75159 12.6321 9.71389 12.0818 10.5425C11.5316 11.3711 10.767 12.035 9.86938 12.4635C8.97176 12.892 7.97475 13.069 6.98448 12.9758C5.99422 12.8826 5.04777 12.5225 4.24589 11.934C3.44402 11.3456 2.81674 10.5506 2.43083 9.6339" stroke="#EB4D2A" stroke-width="3"/>
+<defs>
+<linearGradient id="paint0_linear_8_742" x1="7.5" y1="-11.4444" x2="7.5" y2="13" gradientUnits="userSpaceOnUse">
+<stop stop-color="#4D4F54"/>
+<stop offset="1" stop-color="#ABB0BA" stop-opacity="0.13"/>
+</linearGradient>
+</defs>
+</svg>`;
+
+const BookmarkIcon = `<svg width="15" height="19" viewBox="0 0 15 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0H15V19L7.5 13.5399L0 19V0Z" fill="#EB4D2A"/>
+<path d="M0 0H15V19L7.5 13.5399L0 19V0Z" fill="url(#paint0_linear_8_717)" fill-opacity="0.1"/>
+<defs>
+<linearGradient id="paint0_linear_8_717" x1="15" y1="25.9375" x2="15" y2="0" gradientUnits="userSpaceOnUse">
+<stop offset="0.91311" stop-opacity="0"/>
+<stop offset="0.958565" stop-color="white" stop-opacity="0.654555"/>
+<stop offset="0.973271"/>
+</linearGradient>
+</defs>
+</svg>`;
+
+// Add the search icon SVG at the top with other SVG imports
+const SearchIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_0_1801)">
+<path d="M15.7138 6.8382C18.1647 9.28913 18.1647 13.2629 15.7138 15.7138C13.2629 18.1647 9.28913 18.1647 6.8382 15.7138C4.38727 13.2629 4.38727 9.28913 6.8382 6.8382C9.28913 4.38727 13.2629 4.38727 15.7138 6.8382Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19 19L15.71 15.71" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_0_1801">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>`;
+
 // Mock data for homepage books using the actual images
 const homepageBooks = {
+  continueReading: [
+    {
+      id: 'dune',
+      title: 'Dune',
+      author: 'Frank Herbert',
+      coverImage: require('../src/assets/images/homepage/Dune.png'),
+      progress: 58,
+      currentPage: 589,
+      totalPages: 1200,
+    },
+    {
+      id: 'city-of-orange',
+      title: 'City of Orange',
+      author: 'David Yoon',
+      coverImage: require('../src/assets/images/homepage/City_of_Orange.png'),
+      progress: 58,
+      currentPage: 589,
+      totalPages: null,
+    },
+    {
+      id: 'the-moon',
+      title: 'The Moon and Stars',
+      author: 'Jenna Warren',
+      coverImage: require('../src/assets/images/homepage/The_Moon.png'),
+      progress: 58,
+      currentPage: 589,
+      totalPages: null,
+    },
+  ],
   trending: [
     {
       id: 'dont-look-back',
@@ -98,6 +178,36 @@ const homepageBooks = {
       coverImage: require('../src/assets/images/homepage/The_Summer.png'),
     },
   ],
+};
+
+const ContinueReadingBookCard = ({ book, size = 'large' }) => {
+  return (
+    <View style={styles.continueReadingCard}>
+      {/* Book cover taking up most of the space */}
+      <View style={styles.bookCoverContainer}>
+        <Image source={book.coverImage} style={styles.continueReadingCover} />
+        
+        {/* Rectangle 64 overlay in top-right corner */}
+        <View style={styles.rectangleOverlay}>
+          <SvgXml xml={BookmarkIcon} width={20} height={25} />
+        </View>
+      </View>
+      
+      {/* Bottom section with progress info */}
+      <View style={styles.bottomProgressSection}>
+        {/* Percentage with progress icon */}
+        <View style={styles.leftProgressInfo}>
+          <Text style={styles.percentageText}>{book.progress}%</Text>
+          <SvgXml xml={ProgressIcon} width={12} height={12} />
+        </View>
+        
+        {/* Page information underneath */}
+        <Text style={styles.pageInfoText}>
+          {book.totalPages ? `Page ${book.currentPage}/${book.totalPages}` : `Page ${book.currentPage}`}
+        </Text>
+      </View>
+    </View>
+  );
 };
 
 const BookCard = ({ book, size = 'medium' }) => {
@@ -169,26 +279,15 @@ export default function HomeScreen() {
       
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.push('/profile' as any)}>
-          <View style={styles.menuButton} />
-        </TouchableOpacity>
-        
         <Text style={styles.pagezLogo}>pagez</Text>
-        
         <View style={styles.headerRight}>
-          <TouchableOpacity 
-            style={styles.searchButton}
-            onPress={() => router.push('/search')}
-          >
-            <Text style={styles.searchIcon}>🔍</Text>
+          <TouchableOpacity style={styles.searchButton} onPress={() => router.push('/search')}>
+            <SvgXml xml={SearchIcon} width={24} height={24} />
           </TouchableOpacity>
-          
-          <TouchableOpacity onPress={() => router.push('/profile' as any)}>
-            <Image 
-              source={{ uri: user?.profilePicture || 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face' }} 
-              style={styles.profileImage}
-            />
-          </TouchableOpacity>
+          <Image 
+            source={require('../src/assets/images/homepage/profile.jpg')} 
+            style={styles.profileImage}
+          />
         </View>
       </View>
 
@@ -197,6 +296,20 @@ export default function HomeScreen() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.scrollContent, { paddingBottom: 160 }]}
       >
+        {/* Continue Reading Section */}
+        <SectionHeader svgIcon={GlassesIcon} title="Continue Reading..." />
+        
+        <ScrollView 
+          horizontal 
+          showsHorizontalScrollIndicator={false}
+          style={styles.horizontalScroll}
+          contentContainerStyle={styles.horizontalScrollContent}
+        >
+          {homepageBooks.continueReading.map((book) => (
+            <ContinueReadingBookCard key={book.id} book={book} />
+          ))}
+        </ScrollView>
+
         {/* Trending Books Section */}
         <SectionHeader svgIcon={AttentionFireIcon} title="Trending Books" />
         
@@ -245,26 +358,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 10,
-    paddingBottom: 10,
+    paddingTop: 60,
+    paddingBottom: 20,
     backgroundColor: '#FFFFFF',
   },
   pagezLogo: {
-    fontSize: 28,
+    fontSize: 36,
     fontFamily: 'Bogart-Bold-trial',
     color: '#EB4D2A',
-    fontWeight: 'bold',
+    fontWeight: 'normal',
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 16,
   },
   searchButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#FFFFFF',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#F8F8F8',
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -273,13 +386,10 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-  searchIcon: {
-    fontSize: 18,
-  },
   profileImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     borderWidth: 2,
     borderColor: '#FFFFFF',
   },
@@ -388,6 +498,179 @@ const styles = StyleSheet.create({
   },
   bottomSpacing: {
     height: 60,
+  },
+  bookmarkOverlay: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+  },
+  progressSection: {
+    marginTop: 8,
+    paddingHorizontal: 4,
+  },
+  progressRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginBottom: 6,
+  },
+  progressIcon: {
+    marginLeft: 8,
+  },
+  progressText: {
+    fontSize: 14,
+    fontFamily: 'Bogart-Bold-trial',
+    color: '#EB4D2A',
+  },
+  progressBar: {
+    width: '100%',
+    height: 4,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 2,
+    marginBottom: 6,
+  },
+  progressFill: {
+    height: '100%',
+    backgroundColor: '#EB4D2A',
+    borderRadius: 2,
+  },
+  pageText: {
+    fontSize: 12,
+    fontFamily: 'Bogart-Regular-trial',
+    color: '#666666',
+  },
+  
+  // Continue Reading section styles
+  continueReadingCard: {
+    display: 'flex',
+    width: 112,
+    height: 210,
+    padding: 8,
+    paddingTop: 178,
+    paddingBottom: 10,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexShrink: 0,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.18)',
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 64.815 },
+    shadowOpacity: 0.03,
+    shadowRadius: 46.852,
+    elevation: 8,
+    marginRight: 16,
+  },
+  frameBackground: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100%',
+    height: '100%',
+    zIndex: 0,
+  },
+  continueReadingContent: {
+    position: 'relative',
+    zIndex: 1,
+    padding: 12,
+    flex: 1,
+  },
+  bookCoverContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 43,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  continueReadingCover: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#F0F0F0',
+    resizeMode: 'cover',
+  },
+  rectangleOverlay: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+  },
+  continueProgressSection: {
+    marginTop: 12,
+    alignItems: 'center',
+  },
+  circularProgressContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
+  circularProgress: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    borderWidth: 3,
+    borderColor: '#EB4D2A',
+    backgroundColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  circularProgressText: {
+    fontSize: 10,
+    fontFamily: 'Inter',
+    fontWeight: '500',
+    color: '#EB4D2A',
+  },
+  circularProgressIcon: {
+    marginLeft: 6,
+  },
+  continuePageText: {
+    color: '#898A8D',
+    fontFamily: 'Inter',
+    fontSize: 10,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 14,
+    letterSpacing: -0.4,
+    textAlign: 'center',
+  },
+  bottomProgressSection: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  leftProgressInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  percentageText: {
+    color: '#898A8D',
+    fontFamily: 'Inter',
+    fontSize: 12,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 28,
+    letterSpacing: -0.48,
+  },
+  rightPageInfo: {
+    alignItems: 'flex-end',
+  },
+  pageInfoText: {
+    color: '#898A8D',
+    fontFamily: 'Inter',
+    fontSize: 10,
+    fontStyle: 'normal',
+    fontWeight: '500',
+    lineHeight: 28,
+    letterSpacing: -0.4,
+    marginTop: -15,
   },
 });
 
