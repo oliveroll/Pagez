@@ -16,6 +16,7 @@ import { useBooks } from '../src/context/BooksContext';
 import { MOCK_POSTS, MOCK_AUTHORS } from '../src/constants/mockData';
 import { COLORS } from '../src/constants/colors';
 import { formatRelativeTime } from '../src/utils/formatters';
+import { TabBar } from '../src/components/TabBar';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -190,7 +191,7 @@ export default function CommunityScreen() {
         </View>
       </View>
 
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 160 }}>
         {/* Hot Topics Section */}
         <View style={styles.section}>
           <TouchableOpacity
@@ -226,29 +227,7 @@ export default function CommunityScreen() {
       </ScrollView>
 
       {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => router.push('/home')}
-        >
-          <Ionicons name="home" size={24} color="#666" />
-          <Text style={[styles.navText, styles.activeNavText]}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => router.push('/community')}
-        >
-          <Ionicons name="people" size={24} color="#FF6B35" />
-          <Text style={[styles.navText, styles.activeNavTextOrange]}>Community</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => router.push('/library')}
-        >
-          <Ionicons name="library" size={24} color="#666" />
-          <Text style={styles.navText}>Library</Text>
-        </TouchableOpacity>
-      </View>
+      <TabBar />
 
       {/* Floating Action Button */}
       <TouchableOpacity
@@ -516,33 +495,6 @@ const styles = StyleSheet.create({
     color: '#999',
     paddingHorizontal: 20,
     marginBottom: 15,
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    paddingVertical: 10,
-    paddingBottom: 25,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    gap: 4,
-  },
-  navText: {
-    fontSize: 12,
-    fontFamily: 'Bogart-Regular-Trial',
-    color: '#666',
-  },
-  activeNavText: {
-    color: '#333',
-  },
-  activeNavTextOrange: {
-    color: '#FF6B35',
   },
   fab: {
     position: 'absolute',

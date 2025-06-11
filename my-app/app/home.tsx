@@ -16,6 +16,7 @@ import { useBooks } from '../src/context/BooksContext';
 import { useAuth } from '../src/context/AuthContext';
 import { COLORS } from '../src/constants/colors';
 import { formatProgress } from '../src/utils/formatters';
+import { TabBar } from '../src/components/TabBar';
 
 const { width } = Dimensions.get('window');
 
@@ -114,7 +115,7 @@ export default function HomeScreen() {
       <ScrollView 
         style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[styles.scrollContent, { paddingBottom: 160 }]}
       >
         {/* Continue Reading Section */}
         <SectionHeader icon="📖" title="Continue Reading..." />
@@ -163,31 +164,7 @@ export default function HomeScreen() {
       </ScrollView>
 
       {/* Bottom Tab Bar */}
-      <View style={styles.tabBar}>
-        <TouchableOpacity 
-          style={styles.tabItem}
-          onPress={() => router.push('/home')}
-        >
-          <Text style={styles.tabIconActive}>🏠</Text>
-          <Text style={styles.tabLabelActive}>Home</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={styles.tabItem}
-          onPress={() => router.push('/community')} // Navigate to community
-        >
-          <Text style={styles.tabIcon}>🔗</Text>
-          <Text style={styles.tabLabel}>Community</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={styles.tabItem}
-          onPress={() => router.push('/library')} // Navigate to library
-        >
-          <Text style={styles.tabIcon}>📚</Text>
-          <Text style={styles.tabLabel}>Library</Text>
-        </TouchableOpacity>
-      </View>
+      <TabBar />
     </SafeAreaView>
   );
 }
@@ -202,12 +179,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingTop: 10,
+    paddingBottom: 10,
     backgroundColor: '#FFFFFF',
   },
   pagezLogo: {
     fontSize: 28,
-    fontFamily: 'Bogart-Bold-Trial',
+    fontFamily: 'Bogart-Bold-trial',
     color: '#FF6B35',
     fontWeight: 'bold',
   },
@@ -251,7 +229,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 20,
-    fontFamily: 'Bogart-Bold-Trial',
+    fontFamily: 'Bogart-Bold-trial',
     color: '#333333',
   },
   horizontalScroll: {
@@ -293,7 +271,7 @@ const styles = StyleSheet.create({
   badgeText: {
     color: '#FFFFFF',
     fontSize: 8,
-    fontFamily: 'Bogart-Bold-Trial',
+    fontFamily: 'Bogart-Bold-trial',
   },
   progressContainer: {
     marginTop: 12,
@@ -313,49 +291,17 @@ const styles = StyleSheet.create({
   },
   progressText: {
     fontSize: 14,
-    fontFamily: 'Bogart-Bold-Trial',
+    fontFamily: 'Bogart-Bold-trial',
     color: '#333333',
     marginBottom: 2,
   },
   pageText: {
     fontSize: 12,
-    fontFamily: 'Bogart-Regular-Trial',
+    fontFamily: 'Bogart-Regular-trial',
     color: '#666666',
   },
   bottomSpacing: {
     height: 20,
-  },
-  tabBar: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#F0F0F0',
-  },
-  tabItem: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  tabIconActive: {
-    fontSize: 20,
-    marginBottom: 4,
-  },
-  tabIcon: {
-    fontSize: 20,
-    marginBottom: 4,
-    opacity: 0.6,
-  },
-  tabLabelActive: {
-    fontSize: 12,
-    fontFamily: 'Bogart-Bold-Trial',
-    color: '#FF6B35',
-  },
-  tabLabel: {
-    fontSize: 12,
-    fontFamily: 'Bogart-Regular-Trial',
-    color: '#666666',
   },
   menuButton: {
     width: 30,

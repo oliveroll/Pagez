@@ -10,6 +10,7 @@ import {
   StatusBar,
 } from 'react-native';
 import { router } from 'expo-router';
+import { TabBar } from '../src/components/TabBar';
 
 // Mock data - Replace with real API calls
 const bookmarkedBooks = [
@@ -147,7 +148,7 @@ const HomeScreen = () => {
         </View>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 160 }}>
         {/* Bookmarks Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
@@ -200,31 +201,7 @@ const HomeScreen = () => {
       </ScrollView>
 
       {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => handleNavigation('home')}
-        >
-          <Text style={styles.navIcon}>🏠</Text>
-          <Text style={[styles.navLabel, styles.activeNavLabel]}>Home</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => handleNavigation('community')}
-        >
-          <Text style={styles.navIcon}>👥</Text>
-          <Text style={styles.navLabel}>Community</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity 
-          style={styles.navItem}
-          onPress={() => handleNavigation('library')}
-        >
-          <Text style={styles.navIcon}>📚</Text>
-          <Text style={[styles.navLabel, styles.libraryNavLabel]}>Library</Text>
-        </TouchableOpacity>
-      </View>
+      <TabBar />
     </SafeAreaView>
   );
 };
@@ -385,35 +362,6 @@ const styles = StyleSheet.create({
     height: 140,
     borderRadius: 8,
     backgroundColor: '#f0f0f0',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    backgroundColor: '#ffffff',
-    paddingVertical: 12,
-    paddingBottom: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
-  },
-  navItem: {
-    flex: 1,
-    alignItems: 'center',
-    gap: 4,
-  },
-  navIcon: {
-    fontSize: 20,
-  },
-  navLabel: {
-    fontSize: 12,
-    fontFamily: 'Bogart-Regular-Trial',
-    color: '#666666',
-  },
-  activeNavLabel: {
-    color: '#333333',
-    fontFamily: 'Bogart-Bold-Trial',
-  },
-  libraryNavLabel: {
-    color: '#FF6B35',
-    fontFamily: 'Bogart-Bold-Trial',
   },
 });
 
