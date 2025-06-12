@@ -279,6 +279,92 @@ export const MOCK_AUTHORS: Author[] = [
       facebook: 'SarahChenAuthor',
     },
   },
+  {
+    id: 'author-2',
+    email: 'elena.martinez@example.com',
+    displayName: 'Elena Martinez',
+    username: 'elenamartinez',
+    profilePicture: 'https://randomuser.me/api/portraits/women/44.jpg',
+    isAuthor: true,
+    bio: 'Award-winning author of historical fiction and literary thrillers.',
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+    preferences: {
+      favoriteGenres: ['Historical Fiction', 'Thriller'],
+      readingGoal: 40,
+      notificationsEnabled: true,
+      privacySettings: {
+        profileVisibility: 'public',
+        readingListsVisibility: 'public',
+        activityVisibility: 'public',
+      },
+    },
+    stats: {
+      totalBooksRead: 98,
+      currentlyReading: 1,
+      totalReadingLists: 5,
+      followersCount: 3200,
+      followingCount: 210,
+    },
+    books: [
+      {
+        ...MOCK_BOOKS[0],
+        title: 'The Lost Letters',
+        id: 'book-100',
+      },
+    ],
+    notes: [],
+    publishedBooksCount: 2,
+    totalReaders: 8000,
+    website: 'https://elenamartinez.com',
+    socialLinks: {
+      twitter: '@elena_martinez',
+      instagram: '@elena.martinez.author',
+    },
+  },
+  {
+    id: 'author-3',
+    email: 'david.nguyen@example.com',
+    displayName: 'David Nguyen',
+    username: 'davidnguyen',
+    profilePicture: 'https://randomuser.me/api/portraits/men/32.jpg',
+    isAuthor: true,
+    bio: 'Science fiction and fantasy writer. Dreamer of new worlds.',
+    createdAt: '2024-01-01T00:00:00Z',
+    updatedAt: '2024-01-01T00:00:00Z',
+    preferences: {
+      favoriteGenres: ['Science Fiction', 'Fantasy'],
+      readingGoal: 60,
+      notificationsEnabled: true,
+      privacySettings: {
+        profileVisibility: 'public',
+        readingListsVisibility: 'public',
+        activityVisibility: 'public',
+      },
+    },
+    stats: {
+      totalBooksRead: 150,
+      currentlyReading: 2,
+      totalReadingLists: 7,
+      followersCount: 5400,
+      followingCount: 340,
+    },
+    books: [
+      {
+        ...MOCK_BOOKS[2],
+        title: 'Stars Beyond Reach',
+        id: 'book-101',
+      },
+    ],
+    notes: [],
+    publishedBooksCount: 4,
+    totalReaders: 12000,
+    website: 'https://davidnguyenwrites.com',
+    socialLinks: {
+      twitter: '@davidnguyen',
+      instagram: '@davidnguyenwrites',
+    },
+  },
 ];
 
 // Genre constants

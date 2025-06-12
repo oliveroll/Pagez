@@ -9,9 +9,12 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { router, Stack } from 'expo-router';
 import { SvgXml } from 'react-native-svg';
+import { MOCK_AUTHORS } from '../../src/constants/mockData';
 
 const { width } = Dimensions.get('window');
 
@@ -79,6 +82,46 @@ const RatingStarsSVG = `<svg width="108" height="20" viewBox="0 0 108 20" fill="
 <path d="M98 0L100.245 6.90983H107.511L101.633 11.1803L103.878 18.0902L98 13.8197L92.1221 18.0902L94.3673 11.1803L88.4894 6.90983H95.7549L98 0Z" fill="#FE772A" fill-opacity="0.2"/>
 </svg>`;
 
+const RatingStars1SVG = `<svg width="108" height="20" viewBox="0 0 108 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z" fill="#EB4D2A"/>
+<path d="M32 0L34.2451 6.90983H41.5106L35.6327 11.1803L37.8779 18.0902L32 13.8197L26.1221 18.0902L28.3673 11.1803L22.4894 6.90983H29.7549L32 0Z" fill="#FE772A" fill-opacity="0.2"/>
+<path d="M54 0L56.2451 6.90983H63.5106L57.6327 11.1803L59.8779 18.0902L54 13.8197L48.1221 18.0902L50.3673 11.1803L44.4894 6.90983H51.7549L54 0Z" fill="#FE772A" fill-opacity="0.2"/>
+<path d="M76 0L78.2451 6.90983H85.5106L79.6327 11.1803L81.8779 18.0902L76 13.8197L70.1221 18.0902L72.3673 11.1803L66.4894 6.90983H73.7549L76 0Z" fill="#FE772A" fill-opacity="0.2"/>
+<path d="M98 0L100.245 6.90983H107.511L101.633 11.1803L103.878 18.0902L98 13.8197L92.1221 18.0902L94.3673 11.1803L88.4894 6.90983H95.7549L98 0Z" fill="#FE772A" fill-opacity="0.2"/>
+</svg>`;
+
+const RatingStars2SVG = `<svg width="108" height="20" viewBox="0 0 108 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z" fill="#EB4D2A"/>
+<path d="M32 0L34.2451 6.90983H41.5106L35.6327 11.1803L37.8779 18.0902L32 13.8197L26.1221 18.0902L28.3673 11.1803L22.4894 6.90983H29.7549L32 0Z" fill="#EB4D2A"/>
+<path d="M54 0L56.2451 6.90983H63.5106L57.6327 11.1803L59.8779 18.0902L54 13.8197L48.1221 18.0902L50.3673 11.1803L44.4894 6.90983H51.7549L54 0Z" fill="#FE772A" fill-opacity="0.2"/>
+<path d="M76 0L78.2451 6.90983H85.5106L79.6327 11.1803L81.8779 18.0902L76 13.8197L70.1221 18.0902L72.3673 11.1803L66.4894 6.90983H73.7549L76 0Z" fill="#FE772A" fill-opacity="0.2"/>
+<path d="M98 0L100.245 6.90983H107.511L101.633 11.1803L103.878 18.0902L98 13.8197L92.1221 18.0902L94.3673 11.1803L88.4894 6.90983H95.7549L98 0Z" fill="#FE772A" fill-opacity="0.2"/>
+</svg>`;
+
+const RatingStars3SVG = `<svg width="108" height="20" viewBox="0 0 108 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z" fill="#EB4D2A"/>
+<path d="M32 0L34.2451 6.90983H41.5106L35.6327 11.1803L37.8779 18.0902L32 13.8197L26.1221 18.0902L28.3673 11.1803L22.4894 6.90983H29.7549L32 0Z" fill="#EB4D2A"/>
+<path d="M54 0L56.2451 6.90983H63.5106L57.6327 11.1803L59.8779 18.0902L54 13.8197L48.1221 18.0902L50.3673 11.1803L44.4894 6.90983H51.7549L54 0Z" fill="#EB4D2A"/>
+<path d="M76 0L78.2451 6.90983H85.5106L79.6327 11.1803L81.8779 18.0902L76 13.8197L70.1221 18.0902L72.3673 11.1803L66.4894 6.90983H73.7549L76 0Z" fill="#FE772A" fill-opacity="0.2"/>
+<path d="M98 0L100.245 6.90983H107.511L101.633 11.1803L103.878 18.0902L98 13.8197L92.1221 18.0902L94.3673 11.1803L88.4894 6.90983H95.7549L98 0Z" fill="#FE772A" fill-opacity="0.2"/>
+</svg>`;
+
+const RatingStars4SVG = `<svg width="108" height="20" viewBox="0 0 108 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z" fill="#EB4D2A"/>
+<path d="M32 0L34.2451 6.90983H41.5106L35.6327 11.1803L37.8779 18.0902L32 13.8197L26.1221 18.0902L28.3673 11.1803L22.4894 6.90983H29.7549L32 0Z" fill="#EB4D2A"/>
+<path d="M54 0L56.2451 6.90983H63.5106L57.6327 11.1803L59.8779 18.0902L54 13.8197L48.1221 18.0902L50.3673 11.1803L44.4894 6.90983H51.7549L54 0Z" fill="#EB4D2A"/>
+<path d="M76 0L78.2451 6.90983H85.5106L79.6327 11.1803L81.8779 18.0902L76 13.8197L70.1221 18.0902L72.3673 11.1803L66.4894 6.90983H73.7549L76 0Z" fill="#EB4D2A"/>
+<path d="M98 0L100.245 6.90983H107.511L101.633 11.1803L103.878 18.0902L98 13.8197L92.1221 18.0902L94.3673 11.1803L88.4894 6.90983H95.7549L98 0Z" fill="#FE772A" fill-opacity="0.2"/>
+</svg>`;
+
+const RatingStars5SVG = `<svg width="108" height="20" viewBox="0 0 108 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 0L12.2451 6.90983H19.5106L13.6327 11.1803L15.8779 18.0902L10 13.8197L4.12215 18.0902L6.36729 11.1803L0.489435 6.90983H7.75486L10 0Z" fill="#EB4D2A"/>
+<path d="M32 0L34.2451 6.90983H41.5106L35.6327 11.1803L37.8779 18.0902L32 13.8197L26.1221 18.0902L28.3673 11.1803L22.4894 6.90983H29.7549L32 0Z" fill="#EB4D2A"/>
+<path d="M54 0L56.2451 6.90983H63.5106L57.6327 11.1803L59.8779 18.0902L54 13.8197L48.1221 18.0902L50.3673 11.1803L44.4894 6.90983H51.7549L54 0Z" fill="#EB4D2A"/>
+<path d="M76 0L78.2451 6.90983H85.5106L79.6327 11.1803L81.8779 18.0902L76 13.8197L70.1221 18.0902L72.3673 11.1803L66.4894 6.90983H73.7549L76 0Z" fill="#EB4D2A"/>
+<path d="M98 0L100.245 6.90983H107.511L101.633 11.1803L103.878 18.0902L98 13.8197L92.1221 18.0902L94.3673 11.1803L88.4894 6.90983H95.7549L98 0Z" fill="#EB4D2A"/>
+</svg>`;
+
 // Mock data - Backend developer should replace with API calls
 const MOCK_BOOKS = [
   {
@@ -138,6 +181,31 @@ const MOCK_BOOKS = [
   },
 ];
 
+// Mock data for filter options
+const genres = [
+  { id: 'genre-1', name: 'Horror', description: 'Scary, suspenseful stories' },
+  { id: 'genre-2', name: 'Comedy', description: 'Humorous, light-hearted tales' },
+  { id: 'genre-3', name: 'Zombie', description: 'Undead apocalypse stories' },
+  { id: 'genre-4', name: 'Romance', description: 'Love stories and relationships' },
+  { id: 'genre-5', name: 'Sci-Fi', description: 'Science fiction and futuristic tales' },
+];
+
+const ratings = [
+  { id: 'rating-1', name: '⭐', value: 1 },
+  { id: 'rating-2', name: '⭐⭐', value: 2 },
+  { id: 'rating-3', name: '⭐⭐⭐', value: 3 },
+  { id: 'rating-4', name: '⭐⭐⭐⭐', value: 4 },
+  { id: 'rating-5', name: '⭐⭐⭐⭐⭐', value: 5 },
+];
+
+const ageRatings = [
+  { id: 'age-1', name: '3+', description: 'Content suitable for ages 3 and up' },
+  { id: 'age-2', name: '7+', description: 'Content suitable for ages 7 and up' },
+  { id: 'age-3', name: '13+', description: 'Content suitable for ages 13 and up' },
+  { id: 'age-4', name: '16+', description: 'Content suitable for ages 16 and up' },
+  { id: 'age-5', name: '18+', description: 'Content suitable for ages 18 and up' },
+];
+
 const KEYBOARD_LAYOUT = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
   ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
@@ -150,6 +218,26 @@ export default function HomeScreen() {
   const [searchText, setSearchText] = useState('');
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const [showAuthorModal, setShowAuthorModal] = useState(false);
+  const [authorSearch, setAuthorSearch] = useState('');
+  const [selectedAuthorIds, setSelectedAuthorIds] = useState<string[]>([]);
+  const [filteredAuthors, setFilteredAuthors] = useState<string[]>([]);
+
+  const [showGenreModal, setShowGenreModal] = useState(false);
+  const [showRatingsModal, setShowRatingsModal] = useState(false);
+  const [showAgeRatingsModal, setShowAgeRatingsModal] = useState(false);
+
+  const [genreSearch, setGenreSearch] = useState('');
+  const [ratingsSearch, setRatingsSearch] = useState('');
+  const [ageRatingsSearch, setAgeRatingsSearch] = useState('');
+
+  const [selectedGenreIds, setSelectedGenreIds] = useState<string[]>([]);
+  const [selectedRatingsIds, setSelectedRatingsIds] = useState<string[]>([]);
+  const [selectedAgeRatingsIds, setSelectedAgeRatingsIds] = useState<string[]>([]);
+
+  const [filteredGenres, setFilteredGenres] = useState<string[]>([]);
+  const [filteredRatings, setFilteredRatings] = useState<string[]>([]);
+  const [filteredAgeRatings, setFilteredAgeRatings] = useState<string[]>([]);
 
   // TODO: Backend integration - Replace with actual API call
   const handleSearch = (query: string) => {
@@ -181,8 +269,25 @@ export default function HomeScreen() {
   };
 
   const handleClearFilters = () => {
-    // TODO: Clear all filters
-    console.log('Clear filters');
+    // Clear all selected filters
+    setSelectedAuthorIds([]);
+    setSelectedGenreIds([]);
+    setSelectedRatingsIds([]);
+    setSelectedAgeRatingsIds([]);
+    
+    // Clear all filtered values
+    setFilteredAuthors([]);
+    setFilteredGenres([]);
+    setFilteredRatings([]);
+    setFilteredAgeRatings([]);
+    
+    // Clear search fields
+    setAuthorSearch('');
+    setGenreSearch('');
+    setRatingsSearch('');
+    setAgeRatingsSearch('');
+    
+    console.log('All filters cleared');
   };
 
   const handleDoneFilter = () => {
@@ -197,6 +302,30 @@ export default function HomeScreen() {
     } else {
       setSearchText(prev => prev + key);
     }
+  };
+
+  const toggleAuthorSelect = (id: string) => {
+    setSelectedAuthorIds(prev =>
+      prev.includes(id) ? prev.filter(aid => aid !== id) : [...prev, id]
+    );
+  };
+
+  const toggleGenreSelect = (id: string) => {
+    setSelectedGenreIds(prev =>
+      prev.includes(id) ? prev.filter(gid => gid !== id) : [...prev, id]
+    );
+  };
+
+  const toggleRatingsSelect = (id: string) => {
+    setSelectedRatingsIds(prev =>
+      prev.includes(id) ? prev.filter(rid => rid !== id) : [...prev, id]
+    );
+  };
+
+  const toggleAgeRatingsSelect = (id: string) => {
+    setSelectedAgeRatingsIds(prev =>
+      prev.includes(id) ? prev.filter(arid => arid !== id) : [...prev, id]
+    );
   };
 
   const renderBookCard = (book: typeof MOCK_BOOKS[0]) => (
@@ -224,6 +353,310 @@ export default function HomeScreen() {
         {key}
       </Text>
     </TouchableOpacity>
+  );
+
+  const authors = MOCK_AUTHORS || [];
+
+  const AuthorModal = () => (
+    <View style={styles.filterOverlay}>
+      <TouchableOpacity style={styles.filterBackdrop} onPress={handleCloseFilter} />
+      <View style={styles.filterMenuContainer}>
+        {/* SVG Background */}
+        <View style={styles.filterMenuBackground}>
+          <SvgXml xml={FilterBackgroundSVG} width={393} height={582} />
+        </View>
+        
+        {/* Filter Content */}
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.keyboardAvoidingContainer}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+        >
+          <View style={styles.filterMenu}>
+            <View style={styles.authorHeaderRow}>
+              <Text style={styles.filterTitle}>Search Filters <Text style={styles.authorHeaderGray}>Authors</Text></Text>
+            </View>
+            <View style={styles.authorSearchBar}>
+              <SvgXml xml={SearchLoupeIcon} width={20} height={20} style={{marginLeft: 12, marginRight: 8}} />
+              <TextInput
+                style={styles.authorSearchInput}
+                placeholder="Search Authors"
+                placeholderTextColor="#898A8D"
+                value={authorSearch}
+                onChangeText={setAuthorSearch}
+                blurOnSubmit={false}
+                returnKeyType="search"
+              />
+            </View>
+            <ScrollView 
+              style={{flex: 1, marginTop: 12, maxHeight: 380}}
+              contentContainerStyle={{paddingBottom: 20}}
+              showsVerticalScrollIndicator={true}
+              keyboardShouldPersistTaps="always"
+              keyboardDismissMode="none"
+              nestedScrollEnabled={true}
+            >
+              {authors.filter(a => a.displayName.toLowerCase().includes(authorSearch.toLowerCase())).map((author, idx) => (
+                <TouchableOpacity
+                  key={author.id}
+                  style={selectedAuthorIds.includes(author.id) ? styles.authorBoxSelected : styles.authorBox}
+                  onPress={() => toggleAuthorSelect(author.id)}
+                  activeOpacity={0.8}
+                >
+                  <Image source={{uri: author.profilePicture}} style={styles.authorAvatar} />
+                  <View style={{flex: 1, marginLeft: 12}}>
+                    <Text style={selectedAuthorIds.includes(author.id) ? styles.authorNameSelected : styles.authorName}>{author.displayName}</Text>
+                    <Text style={styles.authorSubtitle} numberOfLines={1}>{author.books && author.books.length > 0 ? author.books.map(b => b.title).join(', ') : 'No books'}</Text>
+                  </View>
+                  <View style={selectedAuthorIds.includes(author.id) ? styles.authorRadioSelected : styles.authorRadioUnselected} />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TouchableOpacity 
+              style={styles.doneButton} 
+              onPress={() => {
+                // Get the names of selected authors
+                const selectedNames = authors
+                  .filter(author => selectedAuthorIds.includes(author.id))
+                  .map(author => author.displayName);
+                
+                // Update filtered authors
+                setFilteredAuthors(selectedNames);
+                setShowAuthorModal(false);
+              }}
+            >
+              <Text style={styles.doneButtonText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </View>
+  );
+
+  const GenreModal = () => (
+    <View style={styles.filterOverlay}>
+      <TouchableOpacity style={styles.filterBackdrop} onPress={handleCloseFilter} />
+      <View style={styles.filterMenuContainer}>
+        <View style={styles.filterMenuBackground}>
+          <SvgXml xml={FilterBackgroundSVG} width={393} height={582} />
+        </View>
+        
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.keyboardAvoidingContainer}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+        >
+          <View style={styles.filterMenu}>
+            <View style={styles.authorHeaderRow}>
+              <Text style={styles.filterTitle}>Search Filters <Text style={styles.authorHeaderGray}>Genres</Text></Text>
+            </View>
+            <View style={styles.authorSearchBar}>
+              <SvgXml xml={SearchLoupeIcon} width={20} height={20} style={{marginLeft: 12, marginRight: 8}} />
+              <TextInput
+                style={styles.authorSearchInput}
+                placeholder="Search Genres"
+                placeholderTextColor="#898A8D"
+                value={genreSearch}
+                onChangeText={setGenreSearch}
+                blurOnSubmit={false}
+                returnKeyType="search"
+              />
+            </View>
+            <ScrollView 
+              style={{flex: 1, marginTop: 12, maxHeight: 380}}
+              contentContainerStyle={{paddingBottom: 20}}
+              showsVerticalScrollIndicator={true}
+              keyboardShouldPersistTaps="always"
+              keyboardDismissMode="none"
+              nestedScrollEnabled={true}
+            >
+              {genres.filter(g => g.name.toLowerCase().includes(genreSearch.toLowerCase())).map((genre) => (
+                <TouchableOpacity
+                  key={genre.id}
+                  style={selectedGenreIds.includes(genre.id) ? styles.authorBoxSelected : styles.authorBox}
+                  onPress={() => toggleGenreSelect(genre.id)}
+                  activeOpacity={0.8}
+                >
+                  <View style={{flex: 1}}>
+                    <Text style={selectedGenreIds.includes(genre.id) ? styles.authorNameSelected : styles.authorName}>{genre.name}</Text>
+                    <Text style={styles.authorSubtitle} numberOfLines={1}>{genre.description}</Text>
+                  </View>
+                  <View style={selectedGenreIds.includes(genre.id) ? styles.authorRadioSelected : styles.authorRadioUnselected} />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TouchableOpacity 
+              style={styles.doneButton} 
+              onPress={() => {
+                const selectedNames = genres
+                  .filter(genre => selectedGenreIds.includes(genre.id))
+                  .map(genre => genre.name);
+                
+                setFilteredGenres(selectedNames);
+                setShowGenreModal(false);
+              }}
+            >
+              <Text style={styles.doneButtonText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </View>
+  );
+
+  const RatingsModal = () => (
+    <View style={styles.filterOverlay}>
+      <TouchableOpacity style={styles.filterBackdrop} onPress={handleCloseFilter} />
+      <View style={styles.filterMenuContainer}>
+        <View style={styles.filterMenuBackground}>
+          <SvgXml xml={FilterBackgroundSVG} width={393} height={582} />
+        </View>
+        
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.keyboardAvoidingContainer}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+        >
+          <View style={styles.filterMenu}>
+            <View style={styles.authorHeaderRow}>
+              <Text style={styles.filterTitle}>Search Filters <Text style={styles.authorHeaderGray}>Ratings</Text></Text>
+            </View>
+            <View style={styles.authorSearchBar}>
+              <SvgXml xml={SearchLoupeIcon} width={20} height={20} style={{marginLeft: 12, marginRight: 8}} />
+              <TextInput
+                style={styles.authorSearchInput}
+                placeholder="Search Ratings"
+                placeholderTextColor="#898A8D"
+                value={ratingsSearch}
+                onChangeText={setRatingsSearch}
+                blurOnSubmit={false}
+                returnKeyType="search"
+              />
+            </View>
+            <ScrollView 
+              style={{flex: 1, marginTop: 12, maxHeight: 380}}
+              contentContainerStyle={{paddingBottom: 20}}
+              showsVerticalScrollIndicator={true}
+              keyboardShouldPersistTaps="always"
+              keyboardDismissMode="none"
+              nestedScrollEnabled={true}
+            >
+              {ratings.filter(r => r.name.toLowerCase().includes(ratingsSearch.toLowerCase())).map((rating) => (
+                <TouchableOpacity
+                  key={rating.id}
+                  style={selectedRatingsIds.includes(rating.id) ? styles.authorBoxSelected : styles.authorBox}
+                  onPress={() => toggleRatingsSelect(rating.id)}
+                  activeOpacity={0.8}
+                >
+                  <View style={{flex: 1}}>
+                    <Text style={selectedRatingsIds.includes(rating.id) ? styles.authorNameSelected : styles.authorName}>
+                      {rating.value} Star{rating.value > 1 ? 's' : ''}
+                    </Text>
+                    <SvgXml 
+                      xml={
+                        rating.value === 1 ? RatingStars1SVG :
+                        rating.value === 2 ? RatingStars2SVG :
+                        rating.value === 3 ? RatingStars3SVG :
+                        rating.value === 4 ? RatingStars4SVG :
+                        RatingStars5SVG
+                      } 
+                      width={108} 
+                      height={20} 
+                      style={{marginTop: 4}} 
+                    />
+                  </View>
+                  <View style={selectedRatingsIds.includes(rating.id) ? styles.authorRadioSelected : styles.authorRadioUnselected} />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TouchableOpacity 
+              style={styles.doneButton} 
+              onPress={() => {
+                const selectedValues = ratings
+                  .filter(rating => selectedRatingsIds.includes(rating.id))
+                  .map(rating => rating.value + " Star" + (rating.value > 1 ? 's' : ''));
+                
+                setFilteredRatings(selectedValues);
+                setShowRatingsModal(false);
+              }}
+            >
+              <Text style={styles.doneButtonText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </View>
+  );
+
+  const AgeRatingsModal = () => (
+    <View style={styles.filterOverlay}>
+      <TouchableOpacity style={styles.filterBackdrop} onPress={handleCloseFilter} />
+      <View style={styles.filterMenuContainer}>
+        <View style={styles.filterMenuBackground}>
+          <SvgXml xml={FilterBackgroundSVG} width={393} height={582} />
+        </View>
+        
+        <KeyboardAvoidingView 
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.keyboardAvoidingContainer}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 64 : 0}
+        >
+          <View style={styles.filterMenu}>
+            <View style={styles.authorHeaderRow}>
+              <Text style={styles.filterTitle}>Search Filters <Text style={styles.authorHeaderGray}>Age Ratings</Text></Text>
+            </View>
+            <View style={styles.authorSearchBar}>
+              <SvgXml xml={SearchLoupeIcon} width={20} height={20} style={{marginLeft: 12, marginRight: 8}} />
+              <TextInput
+                style={styles.authorSearchInput}
+                placeholder="Search Age Ratings"
+                placeholderTextColor="#898A8D"
+                value={ageRatingsSearch}
+                onChangeText={setAgeRatingsSearch}
+                blurOnSubmit={false}
+                returnKeyType="search"
+              />
+            </View>
+            <ScrollView 
+              style={{flex: 1, marginTop: 12, maxHeight: 380}}
+              contentContainerStyle={{paddingBottom: 20}}
+              showsVerticalScrollIndicator={true}
+              keyboardShouldPersistTaps="always"
+              keyboardDismissMode="none"
+              nestedScrollEnabled={true}
+            >
+              {ageRatings.filter(a => a.name.toLowerCase().includes(ageRatingsSearch.toLowerCase())).map((ageRating) => (
+                <TouchableOpacity
+                  key={ageRating.id}
+                  style={selectedAgeRatingsIds.includes(ageRating.id) ? styles.authorBoxSelected : styles.authorBox}
+                  onPress={() => toggleAgeRatingsSelect(ageRating.id)}
+                  activeOpacity={0.8}
+                >
+                  <View style={{flex: 1}}>
+                    <Text style={selectedAgeRatingsIds.includes(ageRating.id) ? styles.authorNameSelected : styles.authorName}>{ageRating.name}</Text>
+                    <Text style={styles.authorSubtitle} numberOfLines={1}>{ageRating.description}</Text>
+                  </View>
+                  <View style={selectedAgeRatingsIds.includes(ageRating.id) ? styles.authorRadioSelected : styles.authorRadioUnselected} />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TouchableOpacity 
+              style={styles.doneButton} 
+              onPress={() => {
+                const selectedNames = ageRatings
+                  .filter(ageRating => selectedAgeRatingsIds.includes(ageRating.id))
+                  .map(ageRating => ageRating.name);
+                
+                setFilteredAgeRatings(selectedNames);
+                setShowAgeRatingsModal(false);
+              }}
+            >
+              <Text style={styles.doneButtonText}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      </View>
+    </View>
   );
 
   return (
@@ -341,51 +774,65 @@ export default function HomeScreen() {
               <View style={styles.filterHeader}>
                 <Text style={styles.filterTitle}>Search Filters</Text>
               </View>
-              
               <View style={styles.filterContent}>
-                {/* Author Filter */}
-                <TouchableOpacity style={styles.filterItem}>
-                  <View style={styles.filterItemContent}>
-                    <Text style={styles.filterLabel}>Author</Text>
-                    <Text style={styles.filterValue}>Steve McQueen, J.K. Rowlings, Elo...</Text>
-                  </View>
-                  <SvgXml xml={ArrowRightIcon} width={24} height={24} />
-                </TouchableOpacity>
-
-                {/* Genre Filter */}
-                <TouchableOpacity style={styles.filterItem}>
-                  <View style={styles.filterItemContent}>
-                    <Text style={styles.filterLabel}>Genre</Text>
-                    <Text style={styles.filterValue}>Horror, Comedy, Zombie</Text>
-                  </View>
-                  <SvgXml xml={ArrowRightIcon} width={24} height={24} />
-                </TouchableOpacity>
-
-                {/* Ratings Filter */}
-                <TouchableOpacity style={styles.filterItem}>
-                  <View style={styles.filterItemContent}>
-                    <Text style={styles.filterLabel}>Ratings</Text>
-                    <SvgXml xml={RatingStarsSVG} width={108} height={20} />
-                  </View>
-                  <SvgXml xml={ArrowRightIcon} width={24} height={24} />
-                </TouchableOpacity>
-
-                {/* Age Ratings Filter */}
-                <TouchableOpacity style={styles.filterItem}>
-                  <View style={styles.filterItemContent}>
-                    <Text style={styles.filterLabel}>Age Ratings</Text>
-                    <Text style={styles.filterValue}>3+, 13+</Text>
-                  </View>
-                  <SvgXml xml={ArrowRightIcon} width={24} height={24} />
-                </TouchableOpacity>
+                <View style={{width: '100%', alignItems: 'center'}}>
+                  {/* Author Filter */}
+                  <TouchableOpacity style={styles.filterItem} onPress={() => setShowAuthorModal(true)}>
+                    <View style={styles.filterItemContent}>
+                      <Text style={styles.filterLabel}>Author</Text>
+                      <Text style={styles.filterValue}>
+                        {filteredAuthors.length > 0 
+                          ? filteredAuthors.join(', ') 
+                          : "Steve McQueen, J.K. Rowlings, Elo..."}
+                      </Text>
+                    </View>
+                    <SvgXml xml={ArrowRightIcon} width={24} height={24} />
+                  </TouchableOpacity>
+                  {/* Genre Filter */}
+                  <TouchableOpacity style={styles.filterItem} onPress={() => setShowGenreModal(true)}>
+                    <View style={styles.filterItemContent}>
+                      <Text style={styles.filterLabel}>Genre</Text>
+                      <Text style={styles.filterValue}>
+                        {filteredGenres.length > 0 
+                          ? filteredGenres.join(', ') 
+                          : "Horror, Comedy, Zombie"}
+                      </Text>
+                    </View>
+                    <SvgXml xml={ArrowRightIcon} width={24} height={24} />
+                  </TouchableOpacity>
+                  {/* Ratings Filter */}
+                  <TouchableOpacity style={styles.filterItem} onPress={() => setShowRatingsModal(true)}>
+                    <View style={styles.filterItemContent}>
+                      <Text style={styles.filterLabel}>Ratings</Text>
+                      {filteredRatings.length > 0 
+                        ? (
+                          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <Text style={styles.filterValue}>{filteredRatings.join(', ')}</Text>
+                          </View>
+                        )
+                        : <SvgXml xml={RatingStarsSVG} width={108} height={20} />
+                      }
+                    </View>
+                    <SvgXml xml={ArrowRightIcon} width={24} height={24} />
+                  </TouchableOpacity>
+                  {/* Age Ratings Filter */}
+                  <TouchableOpacity style={styles.filterItem} onPress={() => setShowAgeRatingsModal(true)}>
+                    <View style={styles.filterItemContent}>
+                      <Text style={styles.filterLabel}>Age Ratings</Text>
+                      <Text style={styles.filterValue}>
+                        {filteredAgeRatings.length > 0 
+                          ? filteredAgeRatings.join(', ') 
+                          : "3+, 13+"}
+                      </Text>
+                    </View>
+                    <SvgXml xml={ArrowRightIcon} width={24} height={24} />
+                  </TouchableOpacity>
+                </View>
               </View>
-
               <View style={styles.filterActions}>
                 <TouchableOpacity 
                   style={styles.clearFiltersButton}
-                  onPress={() => {
-                    // Clear filters logic
-                  }}
+                  onPress={handleClearFilters}
                 >
                   <Text style={styles.clearFiltersText}>Clear Filters</Text>
                 </TouchableOpacity>
@@ -401,6 +848,11 @@ export default function HomeScreen() {
           </View>
         </View>
       )}
+
+      {showAuthorModal && <AuthorModal />}
+      {showGenreModal && <GenreModal />}
+      {showRatingsModal && <RatingsModal />}
+      {showAgeRatingsModal && <AgeRatingsModal />}
     </SafeAreaView>
   );
 }
@@ -635,7 +1087,7 @@ const styles = StyleSheet.create({
     width: 393,
     height: 582,
     flexShrink: 0,
-    position: 'relative',
+    position: 'absolute',
     alignSelf: 'center',
   },
   filterMenuBackground: {
@@ -654,6 +1106,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 40,
     paddingBottom: 30,
+    flex: 1,
+    flexDirection: 'column',
+    height: '100%',
   },
   filterHeader: {
     alignItems: 'flex-start',
@@ -668,6 +1123,9 @@ const styles = StyleSheet.create({
   filterContent: {
     flex: 1,
     alignItems: 'center',
+    paddingBottom: 20,
+    paddingTop: 10,
+    justifyContent: 'center',
   },
   filterItem: {
     flexDirection: 'row',
@@ -716,7 +1174,8 @@ const styles = StyleSheet.create({
   filterActions: {
     flexDirection: 'column',
     marginTop: 12,
-    gap: 8,
+    gap: 0,
+    bottom: -26,
     paddingHorizontal: 0,
     alignItems: 'center',
   },
@@ -737,9 +1196,11 @@ const styles = StyleSheet.create({
     color: '#898A8D',
   },
   doneButton: {
-    width: 320,
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: 6,
+    marginBottom: 12,
     paddingVertical: 16,
-    paddingHorizontal: 20,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 45,
@@ -749,5 +1210,135 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#FFFFFF',
+  },
+  authorHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingTop: 18,
+    paddingBottom: 8,
+  },
+  authorHeaderGray: {
+    color: '#ABB0BA',
+    fontFamily: 'Inter',
+    fontSize: 16,
+    fontStyle: 'normal',
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+  authorSearchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '90%',
+    alignSelf: 'center',
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 16,
+    paddingRight: 16,
+    gap: 6,
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.18)',
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 64.815 },
+    shadowOpacity: 0.03,
+    shadowRadius: 46.852,
+    elevation: 8,
+  },
+  authorSearchInput: {
+    flex: 1,
+    width: '100%',
+    fontFamily: 'Inter',
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#898A8D',
+    lineHeight: 28,
+    letterSpacing: -0.56,
+    backgroundColor: 'transparent',
+    borderWidth: 0,
+    paddingVertical: 0,
+    paddingLeft: 8,
+  },
+  authorBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 24,
+    marginTop: 12,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.18)',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    minHeight: 64,
+  },
+  authorBoxSelected: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 24,
+    marginTop: 12,
+    backgroundColor: '#FFF',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#EB4D2A',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    minHeight: 64,
+  },
+  authorAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    marginRight: 12,
+  },
+  authorName: {
+    fontSize: 20,
+    fontFamily: 'Inter',
+    color: '#1E1E1E',
+    fontWeight: '500',
+    fontStyle: 'normal',
+    lineHeight: 28,
+    letterSpacing: -0.8,
+  },
+  authorNameSelected: {
+    fontSize: 20,
+    fontFamily: 'Inter',
+    color: '#EB4D2A',
+    fontWeight: '500',
+    fontStyle: 'normal',
+    lineHeight: 28,
+    letterSpacing: -0.8,
+  },
+  authorSubtitle: {
+    fontSize: 13,
+    fontFamily: 'Inter',
+    color: '#ABB0BA',
+    fontWeight: '400',
+    marginTop: 2,
+  },
+  authorRadioSelected: {
+    width: 12,
+    height: 12,
+    borderRadius: 38.235,
+    backgroundColor: '#EB4D2A',
+    marginLeft: 16,
+    borderWidth: 2,
+    borderColor: '#EB4D2A',
+  },
+  authorRadioUnselected: {
+    width: 20,
+    height: 20,
+    borderRadius: 38.235,
+    backgroundColor: 'transparent',
+    marginLeft: 16,
+    borderWidth: 2,
+    borderColor: 'rgba(171, 176, 186, 0.60)',
+  },
+  keyboardAvoidingContainer: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'space-between',
   },
 });
