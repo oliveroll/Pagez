@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from '../src/context/AuthContext';
 import { BooksProvider } from '../src/context/BooksContext';
 import { ReadingListsProvider } from '../src/context/ReadingListsContext';
 import { ProfileProvider } from '../src/context/ProfileContext';
+import { ReadingListProvider } from '../src/context/ReadingListContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -73,9 +74,11 @@ export default function RootLayout() {
       <ProfileProvider>
         <BooksProvider>
           <ReadingListsProvider>
-            <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-              <AuthNavigator />
-            </ThemeProvider>
+            <ReadingListProvider>
+              <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+                <AuthNavigator />
+              </ThemeProvider>
+            </ReadingListProvider>
           </ReadingListsProvider>
         </BooksProvider>
       </ProfileProvider>

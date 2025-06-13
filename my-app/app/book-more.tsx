@@ -13,6 +13,7 @@ import {
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SvgXml } from 'react-native-svg';
+import { ReadingListModal } from '../src/components/ReadingListModal';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -232,6 +233,7 @@ export default function BookDetailsScreen() {
   const params = useLocalSearchParams();
   const { bookId } = params;
   const [bookData, setBookData] = useState<BookData>(defaultBookData as BookData);
+  const [isReadingListModalVisible, setIsReadingListModalVisible] = useState(false);
 
   // Find the book by ID from our mock data
   useEffect(() => {
@@ -255,8 +257,19 @@ export default function BookDetailsScreen() {
   };
 
   const handleBookmarkPress = () => {
-    // TODO: Backend developer - implement bookmark functionality
-    console.log('Bookmark pressed');
+    setIsReadingListModalVisible(true);
+  };
+
+  const currentBook = {
+    id: typeof bookId === 'string' ? bookId : (bookData.id || Date.now().toString()),
+    title: bookData.title,
+    author: bookData.author,
+    coverImage: bookData.coverImage,
+  };
+
+  const handleAddNewList = () => {
+    // TODO: Implement add new list functionality
+    console.log('Add new list pressed');
   };
 
   const handleSharePress = () => {
@@ -351,201 +364,207 @@ export default function BookDetailsScreen() {
           }}
           bounces={true}
           alwaysBounceVertical={true}>
-        {/* Book Cover */}
-        <View style={styles.bookCoverContainer}>
-            {typeof bookData.coverImage === 'string' ? (
-          <Image source={{ uri: bookData.coverImage }} style={styles.bookCover} />
-            ) : (
-              <Image source={bookData.coverImage} style={styles.bookCover} />
-            )}
-        </View>
+      {/* Book Cover */}
+      <View style={styles.bookCoverContainer}>
+          {typeof bookData.coverImage === 'string' ? (
+        <Image source={{ uri: bookData.coverImage }} style={styles.bookCover} />
+          ) : (
+            <Image source={bookData.coverImage} style={styles.bookCover} />
+          )}
+      </View>
 
-        {/* Book Info */}
-        <View style={styles.bookInfo}>
-          <Text style={styles.bookTitle}>{bookData.title}</Text>
-          <Text style={styles.bookAuthor}>by {bookData.author}</Text>
-        </View>
+      {/* Book Info */}
+      <View style={styles.bookInfo}>
+        <Text style={styles.bookTitle}>{bookData.title}</Text>
+        <Text style={styles.bookAuthor}>by {bookData.author}</Text>
+      </View>
 
-          {/* Book Stats - Centered container with left-aligned text */}
-          <View style={styles.statsContainerWrapper}>
-        <View style={styles.statsContainer}>
-          <View style={styles.statItem}>
-                <Text style={styles.statNumber} numberOfLines={1}>
-                  {bookData.pages}
-                </Text>
-            <Text style={styles.statLabel}>Pages</Text>
-          </View>
-          <View style={styles.statItem}>
-                <Text style={styles.statNumber} numberOfLines={1}>
-                  {bookData.level}
-                </Text>
-            <Text style={styles.statLabel}>Level</Text>
-          </View>
-          <View style={styles.statItem}>
-                <Text style={styles.statNumber} numberOfLines={1}>
-                  {bookData.genre}
-                </Text>
-            <Text style={styles.statLabel}>Genre</Text>
-          </View>
-          <View style={styles.statItem}>
-                <Text style={styles.statNumber} numberOfLines={1}>
-                  {bookData.series}
-                </Text>
-            <Text style={styles.statLabel}>Series</Text>
-              </View>
-          </View>
+        {/* Book Stats - Centered container with left-aligned text */}
+        <View style={styles.statsContainerWrapper}>
+      <View style={styles.statsContainer}>
+        <View style={styles.statItem}>
+              <Text style={styles.statNumber} numberOfLines={1}>
+                {bookData.pages}
+              </Text>
+          <Text style={styles.statLabel}>Pages</Text>
         </View>
-
-        {/* Rating */}
-        <View style={styles.ratingContainer}>
-            <View style={styles.ratingBox}>
-              <View style={styles.ratingContent}>
-            <View style={styles.starsContainer}>
-              {renderStars(bookData.rating)}
-            </View>
-            <Text style={styles.ratingText}>{bookData.rating} Rating</Text>
-          </View>
-            </View>
-            <View style={styles.dailyReadersBox}>
-              <View style={styles.dailyReadersContent}>
-            <Text style={styles.dailyReaders}>{bookData.dailyReaders}</Text>
-            <Text style={styles.dailyReadersLabel}>Daily Readers</Text>
-              </View>
+        <View style={styles.statItem}>
+              <Text style={styles.statNumber} numberOfLines={1}>
+                {bookData.level}
+              </Text>
+          <Text style={styles.statLabel}>Level</Text>
+        </View>
+        <View style={styles.statItem}>
+              <Text style={styles.statNumber} numberOfLines={1}>
+                {bookData.genre}
+              </Text>
+          <Text style={styles.statLabel}>Genre</Text>
+        </View>
+        <View style={styles.statItem}>
+              <Text style={styles.statNumber} numberOfLines={1}>
+                {bookData.series}
+              </Text>
+          <Text style={styles.statLabel}>Series</Text>
           </View>
         </View>
+      </View>
 
-        {/* Description */}
-        <Text style={styles.description}>{bookData.description}</Text>
-
-        {/* Author's Thoughts */}
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Author's thoughts</Text>
-          <View style={styles.thoughtCard}>
-            <View style={styles.authorInfo}>
-                <Image 
-                  source={require('../src/assets/images/Book_details/Authors thoughts/profile.jpg')} 
-                  style={styles.authorAvatar} 
-                />
-              <View style={styles.authorDetails}>
-                <Text style={styles.authorName}>{bookData.authorThoughts.name}</Text>
-                  <View style={styles.authorBadgeContainer}>
-                    <Text style={styles.authorStarText}>★</Text>
-                    <Text style={styles.authorBadge}>Author</Text>
-                  </View>
-              </View>
-            </View>
-            <Text style={styles.thoughtText}>{bookData.authorThoughts.comment}</Text>
-            <Text style={styles.thoughtSubText}>{bookData.authorThoughts.subComment}</Text>
-            <View style={styles.thoughtActions}>
-              <View style={styles.actionItem}>
-                  <SvgXml xml={thumbsUpSvg} width={18} height={18} />
-                  <Text style={{
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    fontWeight: '500',
-                    color: '#333',
-                    marginLeft: 4,
-                  }}>3k</Text>
-              </View>
-              <View style={styles.actionItem}>
-                  <SvgXml xml={chatBubbleSvg} width={18} height={18} />
-                  <Text style={{
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    fontWeight: '500',
-                    color: '#333',
-                    marginLeft: 4,
-                  }}>354</Text>
-              </View>
-            </View>
+      {/* Rating */}
+      <View style={styles.ratingContainer}>
+          <View style={styles.ratingBox}>
+            <View style={styles.ratingContent}>
+          <View style={styles.starsContainer}>
+            {renderStars(bookData.rating)}
           </View>
+          <Text style={styles.ratingText}>{bookData.rating} Rating</Text>
         </View>
-
-        {/* Reader's Thoughts */}
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Reader's thoughts</Text>
-          <View style={styles.readerCard}>
-              {/* Reader Header */}
-            <View style={styles.readerHeader}>
-                <Image 
-                  source={require('../src/assets/images/Book_details/Authors thoughts/profile.jpg')} 
-                  style={styles.readerAvatar} 
-                />
-              <View style={styles.readerInfo}>
-                <Text style={styles.readerName}>{bookData.readerThoughts.name}</Text>
-                <Text style={styles.readerStatus}>{bookData.readerThoughts.readingStatus}</Text>
-              </View>
+          </View>
+          <View style={styles.dailyReadersBox}>
+            <View style={styles.dailyReadersContent}>
+          <Text style={styles.dailyReaders}>{bookData.dailyReaders}</Text>
+          <Text style={styles.dailyReadersLabel}>Daily Readers</Text>
             </View>
-              
-              {/* Reader Image Container with Background Image */}
-            <View style={styles.readerImageContainer}>
-                <Image 
-                  source={require('../src/assets/images/Book_details/Authors thoughts/Reader_thoughts_bg.png')} 
-                  style={styles.readerBackgroundImage} 
-                  resizeMode="cover"
-                />
-                <View style={styles.bookCoverOverlay}>
-                  <Image 
-                    source={typeof bookData.coverImage === 'string' ? { uri: bookData.coverImage } : bookData.coverImage} 
-                    style={styles.readerBookCover} 
-                  />
+        </View>
+      </View>
+
+      {/* Description */}
+      <Text style={styles.description}>{bookData.description}</Text>
+
+      {/* Author's Thoughts */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Author's thoughts</Text>
+        <View style={styles.thoughtCard}>
+          <View style={styles.authorInfo}>
+              <Image 
+                source={require('../src/assets/images/Book_details/Authors thoughts/profile.jpg')} 
+                style={styles.authorAvatar} 
+              />
+            <View style={styles.authorDetails}>
+              <Text style={styles.authorName}>{bookData.authorThoughts.name}</Text>
+                <View style={styles.authorBadgeContainer}>
+                  <Text style={styles.authorStarText}>★</Text>
+                  <Text style={styles.authorBadge}>Author</Text>
                 </View>
             </View>
-              
-            <Text style={styles.readerComment}>{bookData.readerThoughts.comment}</Text>
-            <View style={styles.readerActions}>
-              <View style={styles.actionItem}>
-                  <SvgXml xml={thumbsUpSvg} width={18} height={18} />
-                  <Text style={{
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    fontWeight: '500',
-                    color: '#333',
-                    marginLeft: 4,
-                  }}>3k</Text>
-              </View>
-              <View style={styles.actionItem}>
-                  <SvgXml xml={chatBubbleSvg} width={18} height={18} />
-                  <Text style={{
-                    fontSize: 16,
-                    fontFamily: 'Inter',
-                    fontWeight: '500',
-                    color: '#333',
-                    marginLeft: 4,
-                  }}>354</Text>
-              </View>
-                <Text style={styles.timeAgo}>20 MINS AGO</Text>
+          </View>
+          <Text style={styles.thoughtText}>{bookData.authorThoughts.comment}</Text>
+          <Text style={styles.thoughtSubText}>{bookData.authorThoughts.subComment}</Text>
+          <View style={styles.thoughtActions}>
+            <View style={styles.actionItem}>
+                <SvgXml xml={thumbsUpSvg} width={18} height={18} />
+                <Text style={{
+                  fontSize: 16,
+                  fontFamily: 'Inter',
+                  fontWeight: '500',
+                  color: '#333',
+                  marginLeft: 4,
+                }}>3k</Text>
+            </View>
+            <View style={styles.actionItem}>
+                <SvgXml xml={chatBubbleSvg} width={18} height={18} />
+                <Text style={{
+                  fontSize: 16,
+                  fontFamily: 'Inter',
+                  fontWeight: '500',
+                  color: '#333',
+                  marginLeft: 4,
+                }}>354</Text>
             </View>
           </View>
         </View>
+      </View>
 
-        {/* Bottom Actions */}
-        <View style={styles.bottomActions}>
-          <TouchableOpacity style={styles.communityButton} onPress={handleCommunityPress}>
-            <Text style={styles.communityButtonText}>Community</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.createPostButton} onPress={handleCreatePostPress}>
-            <Text style={styles.createPostButtonText}>Create Post</Text>
-          </TouchableOpacity>
+      {/* Reader's Thoughts */}
+      <View style={styles.sectionContainer}>
+        <Text style={styles.sectionTitle}>Reader's thoughts</Text>
+        <View style={styles.readerCard}>
+            {/* Reader Header */}
+          <View style={styles.readerHeader}>
+              <Image 
+                source={require('../src/assets/images/Book_details/Authors thoughts/profile.jpg')} 
+                style={styles.readerAvatar} 
+              />
+            <View style={styles.readerInfo}>
+              <Text style={styles.readerName}>{bookData.readerThoughts.name}</Text>
+              <Text style={styles.readerStatus}>{bookData.readerThoughts.readingStatus}</Text>
+            </View>
+          </View>
+            
+            {/* Reader Image Container with Background Image */}
+          <View style={styles.readerImageContainer}>
+              <Image 
+                source={require('../src/assets/images/Book_details/Authors thoughts/Reader_thoughts_bg.png')} 
+                style={styles.readerBackgroundImage} 
+                resizeMode="cover"
+              />
+              <View style={styles.bookCoverOverlay}>
+                <Image 
+                  source={typeof bookData.coverImage === 'string' ? { uri: bookData.coverImage } : bookData.coverImage} 
+                  style={styles.readerBookCover} 
+                />
+              </View>
+          </View>
+            
+        <Text style={styles.readerComment}>{bookData.readerThoughts.comment}</Text>
+        <View style={styles.readerActions}>
+          <View style={styles.actionItem}>
+              <SvgXml xml={thumbsUpSvg} width={18} height={18} />
+              <Text style={{
+                fontSize: 16,
+                fontFamily: 'Inter',
+                fontWeight: '500',
+                color: '#333',
+                marginLeft: 4,
+              }}>3k</Text>
+          </View>
+          <View style={styles.actionItem}>
+              <SvgXml xml={chatBubbleSvg} width={18} height={18} />
+              <Text style={{
+                fontSize: 16,
+                fontFamily: 'Inter',
+                fontWeight: '500',
+                color: '#333',
+                marginLeft: 4,
+              }}>354</Text>
+          </View>
+            <Text style={styles.timeAgo}>20 MINS AGO</Text>
         </View>
-
-        {/* Reading Buttons */}
-        <View style={styles.readingButtons}>
-          <TouchableOpacity style={styles.blurbButton}>
-            <Text style={styles.blurbButtonText}>Blurb</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.startReadingButton} onPress={handleStartReading}>
-            <Text style={styles.startReadingButtonText}>Start reading</Text>
-            <Ionicons name="arrow-forward" size={20} color="white" style={styles.buttonIcon} />
-          </TouchableOpacity>
-        </View>
-
-        {/* Bottom padding for scroll */}
-        <View style={styles.bottomPadding} />
-      </ScrollView>
-    </SafeAreaView>
+      </View>
     </View>
-  );
+
+    {/* Bottom Actions */}
+    <View style={styles.bottomActions}>
+      <TouchableOpacity style={styles.communityButton} onPress={handleCommunityPress}>
+        <Text style={styles.communityButtonText}>Community</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.createPostButton} onPress={handleCreatePostPress}>
+        <Text style={styles.createPostButtonText}>Create Post</Text>
+      </TouchableOpacity>
+    </View>
+
+    {/* Reading Buttons */}
+    <View style={styles.readingButtons}>
+      <TouchableOpacity style={styles.blurbButton}>
+        <Text style={styles.blurbButtonText}>Blurb</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.startReadingButton} onPress={handleStartReading}>
+        <Text style={styles.startReadingButtonText}>Start reading</Text>
+        <Ionicons name="arrow-forward" size={20} color="white" style={styles.buttonIcon} />
+      </TouchableOpacity>
+    </View>
+
+    {/* Bottom padding for scroll */}
+    <View style={styles.bottomPadding} />
+  </ScrollView>
+</SafeAreaView>
+
+<ReadingListModal
+  visible={isReadingListModalVisible}
+  onClose={() => setIsReadingListModalVisible(false)}
+  currentBook={currentBook}
+/>
+</View>
+);
 }
 
 const styles = StyleSheet.create({
