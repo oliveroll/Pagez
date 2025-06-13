@@ -181,8 +181,19 @@ const homepageBooks = {
 };
 
 const ContinueReadingBookCard = ({ book, size = 'large' }) => {
+  const handleBookPress = () => {
+    // Navigate to book details and pass the book data
+    router.push({
+      pathname: '/book-more',
+      params: { bookId: book.id }
+    });
+  };
+
   return (
-    <View style={styles.continueReadingCard}>
+    <TouchableOpacity 
+      style={styles.continueReadingCard}
+      onPress={handleBookPress}
+    >
       {/* Book cover taking up most of the space */}
       <View style={styles.bookCoverContainer}>
         <Image source={book.coverImage} style={styles.continueReadingCover} />
@@ -206,7 +217,7 @@ const ContinueReadingBookCard = ({ book, size = 'large' }) => {
           {book.totalPages ? `Page ${book.currentPage}/${book.totalPages}` : `Page ${book.currentPage}`}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -218,10 +229,18 @@ const BookCard = ({ book, size = 'medium' }) => {
   const paperHeight = 250; // How tall the paper is (independent of position)
   const paperTopPosition = -40; // How much paper extends above book (negative = extends above)
   
+  const handleBookPress = () => {
+    // Navigate to book details and pass the book data
+    router.push({
+      pathname: '/book-more',
+      params: { bookId: book.id }
+    });
+  };
+  
   return (
     <TouchableOpacity 
       style={[styles.bookCard, { width: cardWidth }]} 
-      onPress={() => router.push('/book-more')}
+      onPress={handleBookPress}
     >
       <View style={styles.bookContainer}>
         {/* Paper background layers */}
