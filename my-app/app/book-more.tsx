@@ -14,6 +14,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SvgXml } from 'react-native-svg';
 import { ReadingListModal } from '../src/components/ReadingListModal';
+import { BlurbModal } from '../src/components/BlurbModal';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -234,6 +235,7 @@ export default function BookDetailsScreen() {
   const { bookId } = params;
   const [bookData, setBookData] = useState<BookData>(defaultBookData as BookData);
   const [isReadingListModalVisible, setIsReadingListModalVisible] = useState(false);
+  const [isBlurbModalVisible, setIsBlurbModalVisible] = useState(false);
 
   // Find the book by ID from our mock data
   useEffect(() => {
@@ -290,6 +292,10 @@ export default function BookDetailsScreen() {
   const handleCreatePostPress = () => {
     // TODO: Backend developer - navigate to create post page
     router.push('/create-post' as any);
+  };
+
+  const handleBlurbPress = () => {
+    setIsBlurbModalVisible(true);
   };
 
   const renderStars = (rating: number) => {
@@ -544,7 +550,7 @@ export default function BookDetailsScreen() {
 
     {/* Reading Buttons */}
     <View style={styles.readingButtons}>
-      <TouchableOpacity style={styles.blurbButton}>
+      <TouchableOpacity style={styles.blurbButton} onPress={handleBlurbPress}>
         <Text style={styles.blurbButtonText}>Blurb</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.startReadingButton} onPress={handleStartReading}>
@@ -562,6 +568,14 @@ export default function BookDetailsScreen() {
   visible={isReadingListModalVisible}
   onClose={() => setIsReadingListModalVisible(false)}
   currentBook={currentBook}
+/>
+
+<BlurbModal
+  visible={isBlurbModalVisible}
+  onClose={() => setIsBlurbModalVisible(false)}
+  bookTitle={bookData.title}
+  bookAuthor={bookData.author}
+  blurbText={bookData.description}
 />
 </View>
 );
