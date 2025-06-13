@@ -280,8 +280,14 @@ export default function BookDetailsScreen() {
   };
 
   const handleStartReading = () => {
-    // TODO: Backend developer - implement reading functionality
-    router.push('/reading' as any);
+    router.push({
+      pathname: '/reading',
+      params: {
+        bookId: currentBook.id,
+        title: currentBook.title,
+        author: currentBook.author
+      }
+    });
   };
 
   const handleCommunityPress = () => {
