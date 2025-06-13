@@ -72,6 +72,22 @@ const chatBubbleSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="non
 </defs>
 </svg>`;
 
+// Add the share button SVG definition after other SVG definitions
+const shareButtonSvg = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_3_1827)">
+<path d="M8.55286 10.1141C9.59439 11.1556 9.59439 12.8443 8.55286 13.8858C7.51133 14.9273 5.82268 14.9273 4.78115 13.8858C3.73962 12.8443 3.73962 11.1556 4.78115 10.1141C5.82268 9.07256 7.51133 9.07256 8.55286 10.1141Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19.2189 4.78115C20.2604 5.82268 20.2604 7.51133 19.2189 8.55286C18.1773 9.59439 16.4887 9.59439 15.4472 8.55286C14.4056 7.51133 14.4056 5.82268 15.4472 4.78115C16.4887 3.73962 18.1773 3.73962 19.2189 4.78115Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19.2189 15.4471C20.2604 16.4886 20.2604 18.1773 19.2189 19.2188C18.1773 20.2603 16.4887 20.2603 15.4472 19.2188C14.4056 18.1773 14.4056 16.4886 15.4472 15.4471C16.4887 14.4056 18.1773 14.4056 19.2189 15.4471Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9.04004 10.81L14.96 7.85001" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M9.04004 13.19L14.96 16.15" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="clip0_3_1827">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+</defs>
+</svg>`;
+
 // Define the book data interface
 interface BookData {
   id?: string;
@@ -313,18 +329,18 @@ export default function BookDetailsScreen() {
       <SafeAreaView style={styles.safeArea}>
         {/* Header Actions */}
         <View style={styles.headerActions}>
-          <TouchableOpacity style={styles.headerButton} onPress={handleBackPress}>
-            <Ionicons name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.headerButton} onPress={handleBackPress}>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
           <View style={styles.headerRightButtons}>
-            <TouchableOpacity style={styles.headerButton} onPress={handleBookmarkPress}>
-              <Ionicons name="bookmark-outline" size={24} color="white" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.headerButton} onPress={handleSharePress}>
-              <Ionicons name="share-outline" size={24} color="white" />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={styles.headerButton} onPress={handleBookmarkPress}>
+            <Ionicons name="bookmark-outline" size={24} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerButton} onPress={handleSharePress}>
+              <SvgXml xml={shareButtonSvg} width={24} height={24} />
+          </TouchableOpacity>
         </View>
+      </View>
 
         <ScrollView 
           style={styles.content} 
@@ -335,93 +351,93 @@ export default function BookDetailsScreen() {
           }}
           bounces={true}
           alwaysBounceVertical={true}>
-          {/* Book Cover */}
-          <View style={styles.bookCoverContainer}>
+        {/* Book Cover */}
+        <View style={styles.bookCoverContainer}>
             {typeof bookData.coverImage === 'string' ? (
-            <Image source={{ uri: bookData.coverImage }} style={styles.bookCover} />
+          <Image source={{ uri: bookData.coverImage }} style={styles.bookCover} />
             ) : (
               <Image source={bookData.coverImage} style={styles.bookCover} />
             )}
-          </View>
+        </View>
 
-          {/* Book Info */}
-          <View style={styles.bookInfo}>
-            <Text style={styles.bookTitle}>{bookData.title}</Text>
-            <Text style={styles.bookAuthor}>by {bookData.author}</Text>
-          </View>
+        {/* Book Info */}
+        <View style={styles.bookInfo}>
+          <Text style={styles.bookTitle}>{bookData.title}</Text>
+          <Text style={styles.bookAuthor}>by {bookData.author}</Text>
+        </View>
 
           {/* Book Stats - Centered container with left-aligned text */}
           <View style={styles.statsContainerWrapper}>
-          <View style={styles.statsContainer}>
-            <View style={styles.statItem}>
+        <View style={styles.statsContainer}>
+          <View style={styles.statItem}>
                 <Text style={styles.statNumber} numberOfLines={1}>
                   {bookData.pages}
                 </Text>
-              <Text style={styles.statLabel}>Pages</Text>
-            </View>
-            <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Pages</Text>
+          </View>
+          <View style={styles.statItem}>
                 <Text style={styles.statNumber} numberOfLines={1}>
                   {bookData.level}
                 </Text>
-              <Text style={styles.statLabel}>Level</Text>
-            </View>
-            <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Level</Text>
+          </View>
+          <View style={styles.statItem}>
                 <Text style={styles.statNumber} numberOfLines={1}>
                   {bookData.genre}
                 </Text>
-              <Text style={styles.statLabel}>Genre</Text>
-            </View>
-            <View style={styles.statItem}>
+            <Text style={styles.statLabel}>Genre</Text>
+          </View>
+          <View style={styles.statItem}>
                 <Text style={styles.statNumber} numberOfLines={1}>
                   {bookData.series}
                 </Text>
-              <Text style={styles.statLabel}>Series</Text>
+            <Text style={styles.statLabel}>Series</Text>
               </View>
-            </View>
           </View>
+        </View>
 
-          {/* Rating */}
-          <View style={styles.ratingContainer}>
+        {/* Rating */}
+        <View style={styles.ratingContainer}>
             <View style={styles.ratingBox}>
               <View style={styles.ratingContent}>
-              <View style={styles.starsContainer}>
-                {renderStars(bookData.rating)}
-              </View>
-              <Text style={styles.ratingText}>{bookData.rating} Rating</Text>
+            <View style={styles.starsContainer}>
+              {renderStars(bookData.rating)}
             </View>
+            <Text style={styles.ratingText}>{bookData.rating} Rating</Text>
+          </View>
             </View>
             <View style={styles.dailyReadersBox}>
               <View style={styles.dailyReadersContent}>
-              <Text style={styles.dailyReaders}>{bookData.dailyReaders}</Text>
-              <Text style={styles.dailyReadersLabel}>Daily Readers</Text>
+            <Text style={styles.dailyReaders}>{bookData.dailyReaders}</Text>
+            <Text style={styles.dailyReadersLabel}>Daily Readers</Text>
               </View>
-            </View>
           </View>
+        </View>
 
-          {/* Description */}
-          <Text style={styles.description}>{bookData.description}</Text>
+        {/* Description */}
+        <Text style={styles.description}>{bookData.description}</Text>
 
-          {/* Author's Thoughts */}
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>Author's thoughts</Text>
-            <View style={styles.thoughtCard}>
-              <View style={styles.authorInfo}>
+        {/* Author's Thoughts */}
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Author's thoughts</Text>
+          <View style={styles.thoughtCard}>
+            <View style={styles.authorInfo}>
                 <Image 
                   source={require('../src/assets/images/Book_details/Authors thoughts/profile.jpg')} 
                   style={styles.authorAvatar} 
                 />
-                <View style={styles.authorDetails}>
-                  <Text style={styles.authorName}>{bookData.authorThoughts.name}</Text>
+              <View style={styles.authorDetails}>
+                <Text style={styles.authorName}>{bookData.authorThoughts.name}</Text>
                   <View style={styles.authorBadgeContainer}>
                     <Text style={styles.authorStarText}>★</Text>
                     <Text style={styles.authorBadge}>Author</Text>
                   </View>
-                </View>
               </View>
-              <Text style={styles.thoughtText}>{bookData.authorThoughts.comment}</Text>
-              <Text style={styles.thoughtSubText}>{bookData.authorThoughts.subComment}</Text>
-              <View style={styles.thoughtActions}>
-                <View style={styles.actionItem}>
+            </View>
+            <Text style={styles.thoughtText}>{bookData.authorThoughts.comment}</Text>
+            <Text style={styles.thoughtSubText}>{bookData.authorThoughts.subComment}</Text>
+            <View style={styles.thoughtActions}>
+              <View style={styles.actionItem}>
                   <SvgXml xml={thumbsUpSvg} width={18} height={18} />
                   <Text style={{
                     fontSize: 16,
@@ -430,8 +446,8 @@ export default function BookDetailsScreen() {
                     color: '#333',
                     marginLeft: 4,
                   }}>3k</Text>
-                </View>
-                <View style={styles.actionItem}>
+              </View>
+              <View style={styles.actionItem}>
                   <SvgXml xml={chatBubbleSvg} width={18} height={18} />
                   <Text style={{
                     fontSize: 16,
@@ -440,29 +456,29 @@ export default function BookDetailsScreen() {
                     color: '#333',
                     marginLeft: 4,
                   }}>354</Text>
-                </View>
               </View>
             </View>
           </View>
+        </View>
 
-          {/* Reader's Thoughts */}
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>Reader's thoughts</Text>
-            <View style={styles.readerCard}>
+        {/* Reader's Thoughts */}
+        <View style={styles.sectionContainer}>
+          <Text style={styles.sectionTitle}>Reader's thoughts</Text>
+          <View style={styles.readerCard}>
               {/* Reader Header */}
-              <View style={styles.readerHeader}>
+            <View style={styles.readerHeader}>
                 <Image 
                   source={require('../src/assets/images/Book_details/Authors thoughts/profile.jpg')} 
                   style={styles.readerAvatar} 
                 />
-                <View style={styles.readerInfo}>
-                  <Text style={styles.readerName}>{bookData.readerThoughts.name}</Text>
-                  <Text style={styles.readerStatus}>{bookData.readerThoughts.readingStatus}</Text>
-                </View>
+              <View style={styles.readerInfo}>
+                <Text style={styles.readerName}>{bookData.readerThoughts.name}</Text>
+                <Text style={styles.readerStatus}>{bookData.readerThoughts.readingStatus}</Text>
               </View>
+            </View>
               
               {/* Reader Image Container with Background Image */}
-              <View style={styles.readerImageContainer}>
+            <View style={styles.readerImageContainer}>
                 <Image 
                   source={require('../src/assets/images/Book_details/Authors thoughts/Reader_thoughts_bg.png')} 
                   style={styles.readerBackgroundImage} 
@@ -474,11 +490,11 @@ export default function BookDetailsScreen() {
                     style={styles.readerBookCover} 
                   />
                 </View>
-              </View>
+            </View>
               
-              <Text style={styles.readerComment}>{bookData.readerThoughts.comment}</Text>
-              <View style={styles.readerActions}>
-                <View style={styles.actionItem}>
+            <Text style={styles.readerComment}>{bookData.readerThoughts.comment}</Text>
+            <View style={styles.readerActions}>
+              <View style={styles.actionItem}>
                   <SvgXml xml={thumbsUpSvg} width={18} height={18} />
                   <Text style={{
                     fontSize: 16,
@@ -487,8 +503,8 @@ export default function BookDetailsScreen() {
                     color: '#333',
                     marginLeft: 4,
                   }}>3k</Text>
-                </View>
-                <View style={styles.actionItem}>
+              </View>
+              <View style={styles.actionItem}>
                   <SvgXml xml={chatBubbleSvg} width={18} height={18} />
                   <Text style={{
                     fontSize: 16,
@@ -497,37 +513,37 @@ export default function BookDetailsScreen() {
                     color: '#333',
                     marginLeft: 4,
                   }}>354</Text>
-                </View>
-                <Text style={styles.timeAgo}>20 MINS AGO</Text>
               </View>
+                <Text style={styles.timeAgo}>20 MINS AGO</Text>
             </View>
           </View>
+        </View>
 
-          {/* Bottom Actions */}
-          <View style={styles.bottomActions}>
-            <TouchableOpacity style={styles.communityButton} onPress={handleCommunityPress}>
-              <Text style={styles.communityButtonText}>Community</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.createPostButton} onPress={handleCreatePostPress}>
-              <Text style={styles.createPostButtonText}>Create Post</Text>
-            </TouchableOpacity>
-          </View>
+        {/* Bottom Actions */}
+        <View style={styles.bottomActions}>
+          <TouchableOpacity style={styles.communityButton} onPress={handleCommunityPress}>
+            <Text style={styles.communityButtonText}>Community</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.createPostButton} onPress={handleCreatePostPress}>
+            <Text style={styles.createPostButtonText}>Create Post</Text>
+          </TouchableOpacity>
+        </View>
 
-          {/* Reading Buttons */}
-          <View style={styles.readingButtons}>
-            <TouchableOpacity style={styles.blurbButton}>
-              <Text style={styles.blurbButtonText}>Blurb</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.startReadingButton} onPress={handleStartReading}>
-              <Text style={styles.startReadingButtonText}>Start reading</Text>
-              <Ionicons name="arrow-forward" size={20} color="white" style={styles.buttonIcon} />
-            </TouchableOpacity>
-          </View>
+        {/* Reading Buttons */}
+        <View style={styles.readingButtons}>
+          <TouchableOpacity style={styles.blurbButton}>
+            <Text style={styles.blurbButtonText}>Blurb</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.startReadingButton} onPress={handleStartReading}>
+            <Text style={styles.startReadingButtonText}>Start reading</Text>
+            <Ionicons name="arrow-forward" size={20} color="white" style={styles.buttonIcon} />
+          </TouchableOpacity>
+        </View>
 
-          {/* Bottom padding for scroll */}
-          <View style={styles.bottomPadding} />
-        </ScrollView>
-      </SafeAreaView>
+        {/* Bottom padding for scroll */}
+        <View style={styles.bottomPadding} />
+      </ScrollView>
+    </SafeAreaView>
     </View>
   );
 }
