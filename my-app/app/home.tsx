@@ -415,7 +415,13 @@ export default function HomeScreen() {
               <Text style={styles.menuItemText}>Followings</Text>
               <Text style={styles.menuItemCount}>2.1K</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => {
+                setShowProfileMenu(false);
+                router.push('/followers');
+              }}
+            >
               <Text style={styles.menuItemText}>Followers</Text>
               <Text style={styles.menuItemCount}>234</Text>
             </TouchableOpacity>

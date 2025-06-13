@@ -217,6 +217,12 @@ export default function CommunityScreen() {
     );
   };
 
+  // Add this function to handle navigation to followers screen
+  const navigateToFollowers = () => {
+    setShowProfileMenu(false);
+    router.push('/followers');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#FFFFFF" />
@@ -247,7 +253,10 @@ export default function CommunityScreen() {
               <Text style={styles.menuItemText}>Followings</Text>
               <Text style={styles.menuItemCount}>2.1K</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={navigateToFollowers}
+            >
               <Text style={styles.menuItemText}>Followers</Text>
               <Text style={styles.menuItemCount}>234</Text>
             </TouchableOpacity>

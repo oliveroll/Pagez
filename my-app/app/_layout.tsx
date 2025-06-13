@@ -42,6 +42,7 @@ function AuthNavigator() {
       <Stack.Screen name="profile" options={{ headerShown: false }} />
       <Stack.Screen name="author" options={{ headerShown: false }} />
       <Stack.Screen name="setup" options={{ headerShown: false }} />
+      <Stack.Screen name="followers" options={{ headerShown: false }} />
       <Stack.Screen name="+not-found" />
     </Stack>
   );
