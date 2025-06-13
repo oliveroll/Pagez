@@ -19,9 +19,7 @@ export const BooksProvider: React.FC<BooksProviderProps> = ({ children }) => {
     const loadBooks = async () => {
       setIsLoading(true);
       try {
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+        // Load immediately without delay
         setBooks(MOCK_BOOKS);
         setTrending(TRENDING_BOOKS);
         setRecommended(RECOMMENDED_BOOKS);
@@ -38,9 +36,6 @@ export const BooksProvider: React.FC<BooksProviderProps> = ({ children }) => {
   const searchBooks = async (filters: SearchFilters): Promise<Book[]> => {
     try {
       setIsLoading(true);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
       
       let filteredBooks = [...MOCK_BOOKS];
 
@@ -124,9 +119,6 @@ export const BooksProvider: React.FC<BooksProviderProps> = ({ children }) => {
     try {
       setIsLoading(true);
       
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
       const newBook: Book = {
         ...bookData,
         id: `book-${Date.now()}`,
@@ -146,9 +138,6 @@ export const BooksProvider: React.FC<BooksProviderProps> = ({ children }) => {
   const updateBook = async (id: string, updates: Partial<Book>): Promise<void> => {
     try {
       setIsLoading(true);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
       
       setBooks(prevBooks =>
         prevBooks.map(book =>

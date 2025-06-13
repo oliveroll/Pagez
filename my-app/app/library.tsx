@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,125 +8,116 @@ import {
   StyleSheet,
   SafeAreaView,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native';
+import { SvgXml } from 'react-native-svg';
 import { router } from 'expo-router';
 import { TabBar } from '../src/components/TabBar';
+import { useAuth } from '../src/context/AuthContext';
+import { readingListsService, readingProgressService, booksService } from '../src/services';
+import { ReadingList, ReadingProgress, Book } from '../src/types';
+import { COLORS } from '../src/constants/colors';
 
-// Mock data - Replace with real API calls
-const bookmarkedBooks = [
-  {
-    id: '1',
-    title: "Don't Look Back",
-    author: 'Isaac Nelson',
-    cover: 'https://via.placeholder.com/120x180/333/fff?text=Don%27t+Look+Back',
-    badge: 'VOTED BEST THRILLER NOVEL 20XX',
-  },
-  {
-    id: '2',
-    title: 'Tarzan',
-    author: 'Edgar Rice Burroughs',
-    cover: 'https://via.placeholder.com/120x180/8B4513/fff?text=Tarzan',
-  },
-  {
-    id: '3',
-    title: 'Walk Into The Shadow',
-    author: 'Estelle Darcy',
-    cover: 'https://via.placeholder.com/120x180/2F4F2F/fff?text=Walk+Into+Shadow',
-  },
-];
+// SVG Icons
+const BookmarkIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M19 21L12 16L5 21V5C5 4.46957 5.21071 3.96086 5.58579 3.58579C5.96086 3.21071 6.46957 3 7 3H17C17.5304 3 18.0391 3.21071 18.4142 3.58579C18.7893 3.96086 19 4.46957 19 5V21Z" fill="#EB4D2A" stroke="#EB4D2A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
 
-const continueReadingBooks = [
-  {
-    id: '4',
-    title: 'Dune',
-    author: 'Frank Herbert',
-    cover: 'https://via.placeholder.com/120x180/DAA520/fff?text=Dune',
-    progress: 58,
-    currentPage: 589,
-  },
-  {
-    id: '5',
-    title: 'City of Orange',
-    author: 'David Yoon',
-    cover: 'https://via.placeholder.com/120x180/FF4500/fff?text=City+of+Orange',
-    progress: 58,
-    currentPage: 589,
-  },
-  {
-    id: '6',
-    title: 'The Moon and Stars',
-    author: 'Jenna Warren',
-    cover: 'https://via.placeholder.com/120x180/483D8B/fff?text=Moon+%26+Stars',
-    progress: 58,
-    currentPage: 589,
-  },
-];
+const SearchIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.7138 6.8382C18.1647 9.28913 18.1647 13.2629 15.7138 15.7138C13.2629 18.1647 9.28913 18.1647 6.8382 15.7138C4.38727 13.2629 4.38727 9.28913 6.8382 6.8382C9.28913 4.38727 13.2629 4.38727 15.7138 6.8382Z" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M19 19L15.71 15.71" stroke="black" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
 
-const HomeScreen = () => {
-  // TODO: Replace with real API calls
-  const handleBookPress = (bookId: string) => {
-    router.push('/book-more' as any);
+const LibraryScreen = () => {
+  const { user } = useAuth();
+  const [readingLists, setReadingLists] = useState<ReadingList[]>([]);
+  const [currentlyReading, setCurrentlyReading] = useState<ReadingProgress[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      loadLibraryData();
+    }
+  }, [user]);
+
+  const loadLibraryData = async () => {
+    if (!user) return;
+    
+    setLoading(true);
+    try {
+      // Load reading lists
+      const listsResponse = await readingListsService.getUserReadingLists(user.id);
+      if (listsResponse.success) {
+        setReadingLists(listsResponse.data);
+      }
+
+      // Load currently reading
+      const currentlyReadingResponse = await readingProgressService.getCurrentlyReading(user.id);
+      if (currentlyReadingResponse.success) {
+        setCurrentlyReading(currentlyReadingResponse.data);
+      }
+    } catch (error) {
+      console.error('Error loading library data:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleViewAllBookmarks = () => {
-    router.push('/home' as any);
-  };
+  const BookCard = ({ bookId, progress }: { bookId: string; progress?: ReadingProgress }) => {
+    const [book, setBook] = useState<Book | null>(null);
 
-  const handleSearchPress = () => {
-    router.push('/search');
-  };
+    useEffect(() => {
+      loadBook();
+    }, [bookId]);
 
-  const handleProfilePress = () => {
-    router.push('/home' as any);
-  };
+    const loadBook = async () => {
+      try {
+        const response = await booksService.getBookById(bookId);
+        if (response.success) {
+          setBook(response.data);
+        }
+      } catch (error) {
+        console.error('Error loading book:', error);
+      }
+    };
 
-  const handleNavigation = (screen: string) => {
-    if (screen === 'home') router.push('/home');
-    else if (screen === 'community') router.push('/community');
-    else if (screen === 'library') router.push('/library');
-    else router.push('/home' as any);
-  };
+    if (!book) {
+      return (
+        <View style={styles.bookCardLoading}>
+          <ActivityIndicator size="small" color="#EB4D2A" />
+        </View>
+      );
+    }
 
-  const renderBookmarkItem = (book: any) => (
-    <TouchableOpacity
-      key={book.id}
-      style={styles.bookmarkItem}
-      onPress={() => handleBookPress(book.id)}
-    >
-      <View style={styles.bookCoverContainer}>
-        {book.badge && (
-          <View style={styles.badgeContainer}>
-            <Text style={styles.badgeText}>{book.badge}</Text>
+    return (
+      <TouchableOpacity
+        style={styles.bookCard}
+        onPress={() => router.push({
+          pathname: '/book-more',
+          params: { bookId: book.id }
+        })}
+      >
+        <Image source={typeof book.coverUrl === 'string' ? { uri: book.coverUrl } : book.coverUrl} style={styles.bookCover} />
+        {progress && (
+          <View style={styles.progressOverlay}>
+            <Text style={styles.progressText}>{progress.percentage}%</Text>
           </View>
         )}
-        <Image source={{ uri: book.cover }} style={styles.bookCover} />
-      </View>
-    </TouchableOpacity>
-  );
+      </TouchableOpacity>
+    );
+  };
 
-  const renderContinueReadingItem = (book: any) => (
-    <TouchableOpacity
-      key={book.id}
-      style={styles.continueReadingItem}
-      onPress={() => handleBookPress(book.id)}
-    >
-      <View style={styles.bookCoverContainer}>
-        <Image source={{ uri: book.cover }} style={styles.bookCover} />
-      </View>
-      <View style={styles.progressContainer}>
-        <Text style={styles.progressPercentage}>{book.progress}%</Text>
-        <Text style={styles.progressPage}>Page {book.currentPage}</Text>
-        <View style={styles.progressBarContainer}>
-          <View 
-            style={[
-              styles.progressBar, 
-              { width: `${book.progress}%` }
-            ]} 
-          />
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#EB4D2A" />
+          <Text style={styles.loadingText}>Loading your library...</Text>
         </View>
-      </View>
-    </TouchableOpacity>
-  );
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -136,71 +127,105 @@ const HomeScreen = () => {
       <View style={styles.header}>
         <Text style={styles.logo}>pagez</Text>
         <View style={styles.headerRight}>
-          <TouchableOpacity onPress={handleSearchPress} style={styles.searchButton}>
-            <Text style={styles.searchIcon}>🔍</Text>
+          <TouchableOpacity onPress={() => router.push('/search')} style={styles.headerButton}>
+            <SvgXml xml={SearchIcon} width={24} height={24} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={handleProfilePress}>
+          <TouchableOpacity onPress={() => setShowProfileMenu(!showProfileMenu)}>
             <Image 
-              source={{ uri: 'https://via.placeholder.com/40x40/4CAF50/fff?text=U' }}
+              source={user?.profilePicture ? { uri: user.profilePicture } : require('../src/assets/images/homepage/profile.jpg')}
               style={styles.profileImage}
             />
           </TouchableOpacity>
         </View>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 160 }}>
-        {/* Bookmarks Section */}
+      {/* Profile Dropdown Menu */}
+      {showProfileMenu && (
+        <View style={styles.profileMenuContainer}>
+          <View style={styles.profileMenu}>
+            <TouchableOpacity style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Followings</Text>
+              <Text style={styles.menuItemCount}>2.1K</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Followers</Text>
+              <Text style={styles.menuItemCount}>234</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem}>
+              <Text style={styles.menuItemText}>My posts</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => router.push('/profile')}
+            >
+              <Text style={styles.menuItemText}>Settings</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+      <ScrollView 
+        style={styles.content} 
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={{ paddingBottom: 160 }}
+      >
+        {/* Reading Lists Section */}
         <View style={styles.section}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionTitleContainer}>
-              <Text style={styles.bookmarkIcon}>🔖</Text>
-              <Text style={styles.sectionTitle}>Bookmarks</Text>
+              <SvgXml xml={BookmarkIcon} width={24} height={24} />
+              <Text style={styles.sectionTitle}>My Reading Lists</Text>
             </View>
-            <TouchableOpacity onPress={handleViewAllBookmarks}>
-              <Text style={styles.viewAllButton}>View All</Text>
-            </TouchableOpacity>
           </View>
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            style={styles.horizontalScroll}
-          >
-            {bookmarkedBooks.map(renderBookmarkItem)}
-          </ScrollView>
+          
+          {readingLists.length > 0 ? (
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={false}
+              style={styles.horizontalScroll}
+            >
+              {readingLists.map((list) => (
+                <TouchableOpacity key={list.id} style={styles.readingListCard}>
+                  <View style={styles.listCoverGrid}>
+                    {list.coverImages.slice(0, 4).map((coverUrl, index) => (
+                      <Image
+                        key={index}
+                        source={typeof coverUrl === 'string' ? { uri: coverUrl } : coverUrl}
+                        style={styles.listCoverThumbnail}
+                      />
+                    ))}
+                  </View>
+                  <Text style={styles.listTitle} numberOfLines={2}>{list.name}</Text>
+                  <Text style={styles.listBooksCount}>{list.totalBooks} books</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          ) : (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyStateText}>No reading lists yet</Text>
+            </View>
+          )}
         </View>
 
         {/* Continue Reading Section */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <View style={styles.sectionTitleContainer}>
-              <Text style={styles.glassesIcon}>👓</Text>
-              <Text style={styles.sectionTitle}>Continue Reading...</Text>
+        {currentlyReading.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Continue Reading</Text>
             </View>
-          </View>
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            style={styles.horizontalScroll}
-          >
-            {continueReadingBooks.map(renderContinueReadingItem)}
-          </ScrollView>
-        </View>
-
-        {/* Additional Books Grid */}
-        <View style={styles.additionalBooksGrid}>
-          {bookmarkedBooks.map((book, index) => (
-            <TouchableOpacity
-              key={`additional-${book.id}`}
-              style={styles.gridBookItem}
-              onPress={() => handleBookPress(book.id)}
+            <ScrollView 
+              horizontal 
+              showsHorizontalScrollIndicator={false}
+              style={styles.horizontalScroll}
             >
-              <Image source={{ uri: book.cover }} style={styles.gridBookCover} />
-            </TouchableOpacity>
-          ))}
-        </View>
+              {currentlyReading.map((progress) => (
+                <BookCard key={progress.id} bookId={progress.bookId} progress={progress} />
+              ))}
+            </ScrollView>
+          </View>
+        )}
       </ScrollView>
 
-      {/* Bottom Navigation */}
       <TabBar />
     </SafeAreaView>
   );
@@ -209,36 +234,44 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    fontFamily: 'Bogart-Medium-trial',
+    color: '#666666',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: '#ffffff',
+    paddingTop: 60,
+    paddingBottom: 20,
   },
   logo: {
-    fontSize: 32,
-    fontFamily: 'Bogart-Bold-Trial',
-    color: '#FF6B35',
+    fontSize: 36,
+    fontFamily: 'Bogart-Bold-trial',
+    color: '#EB4D2A',
   },
   headerRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 15,
+    gap: 16,
   },
-  searchButton: {
+  headerButton: {
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: '#f5f5f5',
-    justifyContent: 'center',
+    backgroundColor: '#F8F8F8',
     alignItems: 'center',
-  },
-  searchIcon: {
-    fontSize: 18,
+    justifyContent: 'center',
   },
   profileImage: {
     width: 44,
@@ -247,9 +280,9 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
   },
   section: {
+    paddingHorizontal: 20,
     marginBottom: 30,
   },
   sectionHeader: {
@@ -261,108 +294,125 @@ const styles = StyleSheet.create({
   sectionTitleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
-  bookmarkIcon: {
-    fontSize: 20,
-    color: '#FF6B35',
-  },
-  glassesIcon: {
-    fontSize: 20,
-    color: '#FF6B35',
+    gap: 12,
   },
   sectionTitle: {
-    fontSize: 22,
-    fontFamily: 'Bogart-Bold-Trial',
-    color: '#333333',
-  },
-  viewAllButton: {
-    fontSize: 16,
-    fontFamily: 'Bogart-Regular-Trial',
-    color: '#666666',
-    backgroundColor: '#f5f5f5',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    fontSize: 20,
+    fontFamily: 'Bogart-Bold-trial',
+    color: '#1E1E1E',
   },
   horizontalScroll: {
     marginLeft: -20,
     paddingLeft: 20,
   },
-  bookmarkItem: {
+  readingListCard: {
+    width: 120,
     marginRight: 15,
   },
-  bookCoverContainer: {
-    position: 'relative',
-  },
-  badgeContainer: {
-    position: 'absolute',
-    top: 5,
-    left: 5,
-    right: 5,
-    backgroundColor: 'rgba(0,0,0,0.8)',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 4,
-    zIndex: 1,
-  },
-  badgeText: {
-    color: '#ffffff',
-    fontSize: 10,
-    fontFamily: 'Bogart-Regular-Trial',
-    textAlign: 'center',
-  },
-  bookCover: {
+  listCoverGrid: {
     width: 120,
-    height: 180,
-    borderRadius: 8,
-    backgroundColor: '#f0f0f0',
+    height: 120,
+    borderRadius: 12,
+    overflow: 'hidden',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    backgroundColor: '#F5F5F5',
   },
-  continueReadingItem: {
-    marginRight: 15,
-    width: 120,
+  listCoverThumbnail: {
+    width: '50%',
+    height: '50%',
   },
-  progressContainer: {
-    marginTop: 10,
-  },
-  progressPercentage: {
-    fontSize: 16,
-    fontFamily: 'Bogart-Bold-Trial',
-    color: '#333333',
-  },
-  progressPage: {
+  listTitle: {
     fontSize: 14,
-    fontFamily: 'Bogart-Regular-Trial',
+    fontFamily: 'Bogart-Medium-trial',
+    color: '#1E1E1E',
+    marginTop: 8,
+  },
+  listBooksCount: {
+    fontSize: 12,
+    fontFamily: 'Bogart-Regular-trial',
     color: '#666666',
     marginTop: 2,
   },
-  progressBarContainer: {
-    marginTop: 8,
-    height: 4,
-    backgroundColor: '#e0e0e0',
-    borderRadius: 2,
+  bookCard: {
+    width: 100,
+    marginRight: 15,
+    position: 'relative',
   },
-  progressBar: {
-    height: 4,
-    backgroundColor: '#FF6B35',
-    borderRadius: 2,
+  bookCardLoading: {
+    width: 100,
+    height: 140,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 15,
   },
-  additionalBooksGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
-  gridBookItem: {
-    width: '30%',
-    marginBottom: 15,
-  },
-  gridBookCover: {
-    width: '100%',
+  bookCover: {
+    width: 100,
     height: 140,
     borderRadius: 8,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#F5F5F5',
+  },
+  progressOverlay: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    backgroundColor: 'rgba(235, 77, 42, 0.9)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  progressText: {
+    fontSize: 10,
+    fontFamily: 'Bogart-Medium-trial',
+    color: '#FFFFFF',
+  },
+  emptyState: {
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  emptyStateText: {
+    fontSize: 16,
+    fontFamily: 'Bogart-Medium-trial',
+    color: '#666666',
+  },
+  profileMenuContainer: {
+    position: 'absolute',
+    top: 120,
+    right: 20,
+    zIndex: 1000,
+  },
+  profileMenu: {
+    width: 244,
+    height: 195,
+    flexShrink: 0,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.22)',
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 64.815 },
+    shadowOpacity: 0.03,
+    shadowRadius: 46.852,
+    elevation: 10,
+    paddingVertical: 10,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+  },
+  menuItemText: {
+    fontSize: 16,
+    fontFamily: 'Inter',
+    color: '#000',
+  },
+  menuItemCount: {
+    fontSize: 16,
+    fontFamily: 'Inter',
+    color: '#999',
   },
 });
 
-export default HomeScreen;
+export default LibraryScreen; 

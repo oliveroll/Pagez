@@ -40,7 +40,7 @@ export interface Book {
   title: string;
   author: string;
   authorId?: string;
-  coverUrl: string;
+  coverUrl: string | number; // Allow both URL strings and require() asset numbers
   description: string;
   isbn?: string;
   publishedDate: string;
@@ -63,7 +63,7 @@ export interface ReadingList {
   description?: string;
   books: Book[];
   isPublic: boolean;
-  coverImages: string[]; // First 4 book covers for display
+  coverImages: (string | number)[]; // First 4 book covers for display - support both URLs and assets
   totalBooks: number;
   createdAt: string;
   updatedAt: string;

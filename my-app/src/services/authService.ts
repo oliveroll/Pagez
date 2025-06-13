@@ -1,5 +1,6 @@
 import { MOCK_USERS } from '../constants/mockData';
 import { User, LoginForm, RegisterForm } from '../types';
+import { readingListsService } from './readingListsService';
 
 // Mock user data for social logins
 const mockGoogleUser: User = {
@@ -90,6 +91,13 @@ export const authService = {
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 1500));
 
+    // Create default reading lists for Google user (if new user)
+    try {
+      await readingListsService.createDefaultReadingLists(mockGoogleUser.id);
+    } catch (error) {
+      console.warn('Failed to create default reading lists for Google user:', error);
+    }
+
     // Simulate successful Google auth
     return { 
       user: mockGoogleUser, 
@@ -104,6 +112,13 @@ export const authService = {
   loginWithApple: async () => {
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 1300));
+
+    // Create default reading lists for Apple user (if new user)
+    try {
+      await readingListsService.createDefaultReadingLists(mockAppleUser.id);
+    } catch (error) {
+      console.warn('Failed to create default reading lists for Apple user:', error);
+    }
 
     // Simulate successful Apple auth
     return { 
@@ -162,6 +177,14 @@ export const authService = {
         followingCount: 0,
       },
     };
+
+    // Create default reading lists for the new user
+    try {
+      await readingListsService.createDefaultReadingLists(newUser.id);
+    } catch (error) {
+      console.warn('Failed to create default reading lists:', error);
+      // Don't fail registration if reading lists creation fails
+    }
 
     return {
       user: newUser,

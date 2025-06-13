@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,8 @@ import { useAuth } from '../src/context/AuthContext';
 import { COLORS } from '../src/constants/colors';
 import { formatProgress } from '../src/utils/formatters';
 import { TabBar } from '../src/components/TabBar';
+import { booksService, readingProgressService } from '../src/services';
+import { Book, ReadingProgress } from '../src/types';
 
 const { width } = Dimensions.get('window');
 
@@ -108,79 +110,71 @@ const SearchIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" 
 </svg>`;
 
 // Mock data for homepage books using the actual images
-const homepageBooks = {
-  continueReading: [
-    {
-      id: 'dune',
-      title: 'Dune',
-      author: 'Frank Herbert',
-      coverImage: require('../src/assets/images/homepage/Dune.png'),
-      progress: 58,
-      currentPage: 589,
-      totalPages: 1200,
-    },
-    {
-      id: 'city-of-orange',
-      title: 'City of Orange',
-      author: 'David Yoon',
-      coverImage: require('../src/assets/images/homepage/City_of_Orange.png'),
-      progress: 58,
-      currentPage: 589,
-      totalPages: null,
-    },
-    {
-      id: 'the-moon',
-      title: 'The Moon and Stars',
-      author: 'Jenna Warren',
-      coverImage: require('../src/assets/images/homepage/The_Moon.png'),
-      progress: 58,
-      currentPage: 589,
-      totalPages: null,
-    },
-  ],
-  trending: [
-    {
-      id: 'dont-look-back',
-      title: "Don't Look Back",
-      author: 'Isaac Nelson',
-      coverImage: require('../src/assets/images/homepage/Dont_look_back.png'),
-    },
-    {
-      id: 'tarzan',
-      title: 'Tarzan',
-      author: 'Edgar Rice Burroughs',
-      coverImage: require('../src/assets/images/homepage/Tarzan.png'),
-    },
-    {
-      id: 'walk-into-shadow',
-      title: 'Walk Into the Shadow',
-      author: 'John Waters',
-      coverImage: require('../src/assets/images/homepage/Salman.png'),
-    },
-  ],
-  communityFavorites: [
-    {
-      id: 'harry-potter',
-      title: 'Harry Potter',
-      author: 'J.K. Rowling',
-      coverImage: require('../src/assets/images/homepage/Harry_potter.png'),
-    },
-    {
-      id: 'sisters',
-      title: 'Sisters',
-      author: 'Raina Telgemeier',
-      coverImage: require('../src/assets/images/homepage/Sisters.png'),
-    },
-    {
-      id: 'the-summer',
-      title: 'The Summer',
-      author: 'Kathryn Williams',
-      coverImage: require('../src/assets/images/homepage/The_Summer.png'),
-    },
-  ],
-};
+const mockContinueReadingData = [
+  {
+    id: 'dune-progress',
+    bookId: 'dune',
+    userId: 'mock-user',
+    currentPage: 589,
+    totalPages: 1200,
+    percentage: 49,
+    status: 'reading' as const,
+    lastReadAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'city-progress',
+    bookId: 'city-of-orange',
+    userId: 'mock-user',
+    currentPage: 156,
+    totalPages: 320,
+    percentage: 49,
+    status: 'reading' as const,
+    lastReadAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: 'moon-progress',
+    bookId: 'the-moon',
+    userId: 'mock-user',
+    currentPage: 89,
+    totalPages: 280,
+    percentage: 32,
+    status: 'reading' as const,
+    lastReadAt: new Date().toISOString(),
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+];
 
-const ContinueReadingBookCard = ({ book, size = 'large' }) => {
+const ContinueReadingBookCard = ({ progress, size = 'large' }) => {
+  const [book, setBook] = useState<Book | null>(null);
+
+  useEffect(() => {
+    loadBookData();
+  }, [progress.bookId]);
+
+  const loadBookData = async () => {
+    try {
+      const response = await booksService.getBookById(progress.bookId);
+      if (response.success) {
+        setBook(response.data);
+      }
+    } catch (error) {
+      console.error('Error loading book data:', error);
+    }
+  };
+
+  if (!book) {
+    return (
+      <View style={styles.continueReadingCard}>
+        <ActivityIndicator size="small" color={COLORS.primary[500]} />
+      </View>
+    );
+  }
+
   const handleBookPress = () => {
     // Navigate to book details and pass the book data
     router.push({
@@ -196,7 +190,7 @@ const ContinueReadingBookCard = ({ book, size = 'large' }) => {
     >
       {/* Book cover taking up most of the space */}
       <View style={styles.bookCoverContainer}>
-        <Image source={book.coverImage} style={styles.continueReadingCover} />
+        <Image source={typeof book.coverUrl === 'string' ? { uri: book.coverUrl } : book.coverUrl} style={styles.continueReadingCover} />
         
         {/* Rectangle 64 overlay in top-right corner */}
         <View style={styles.rectangleOverlay}>
@@ -208,13 +202,13 @@ const ContinueReadingBookCard = ({ book, size = 'large' }) => {
       <View style={styles.bottomProgressSection}>
         {/* Percentage with progress icon */}
         <View style={styles.leftProgressInfo}>
-          <Text style={styles.percentageText}>{book.progress}%</Text>
+          <Text style={styles.percentageText}>{progress.percentage}%</Text>
           <SvgXml xml={ProgressIcon} width={12} height={12} />
         </View>
         
         {/* Page information underneath */}
         <Text style={styles.pageInfoText}>
-          {book.totalPages ? `Page ${book.currentPage}/${book.totalPages}` : `Page ${book.currentPage}`}
+          {progress.totalPages ? `Page ${progress.currentPage}/${progress.totalPages}` : `Page ${progress.currentPage}`}
         </Text>
       </View>
     </TouchableOpacity>
@@ -258,7 +252,7 @@ const BookCard = ({ book, size = 'medium' }) => {
         
         {/* Book cover */}
       <View style={styles.bookCover}>
-          <Image source={book.coverImage} style={styles.coverImage} />
+          <Image source={typeof book.coverUrl === 'string' ? { uri: book.coverUrl } : book.coverUrl} style={styles.coverImage} />
           </View>
       </View>
       
@@ -280,13 +274,112 @@ const SectionHeader = ({ svgIcon, title }) => (
 export default function HomeScreen() {
   const { books, trending, recommended, isLoading } = useBooks();
   const { user } = useAuth();
+  const [continueReading, setContinueReading] = useState<ReadingProgress[]>([]);
+  const [loadingProgress, setLoadingProgress] = useState(true);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  
+  // Service-based state
+  const [trendingBooks, setTrendingBooks] = useState<Book[]>([]);
+  const [communityFavorites, setCommunityFavorites] = useState<Book[]>([]);
+  const [currentlyReading, setCurrentlyReading] = useState<ReadingProgress[]>([]);
+  const [servicesLoading, setServicesLoading] = useState(true);
 
-  if (isLoading) {
+  useEffect(() => {
+    loadHomeData();
+  }, [user]);
+
+  const loadHomeData = async () => {
+    console.log('loadHomeData called, user:', user?.displayName || 'No user');
+    
+    setServicesLoading(true);
+    try {
+      console.log('Starting parallel data loading...');
+      
+      if (user) {
+        // Load all data including user-specific content when authenticated
+        const [trendingResponse, allBooksResponse, progressResponse] = await Promise.all([
+          booksService.getTrendingBooks(),
+          booksService.getAllBooks(),
+          readingProgressService.getCurrentlyReading(user.id)
+        ]);
+
+        console.log('Data loaded (authenticated):', {
+          trending: trendingResponse.success,
+          allBooks: allBooksResponse.success,
+          progress: progressResponse.success
+        });
+
+        // Process trending books
+        if (trendingResponse.success) {
+          setTrendingBooks(trendingResponse.data.slice(0, 10));
+        }
+
+        // Process community favorites (top rated books)
+        if (allBooksResponse.success) {
+          const topRated = allBooksResponse.data
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, 10);
+          setCommunityFavorites(topRated);
+        }
+
+        // Process currently reading
+        if (progressResponse.success) {
+          setCurrentlyReading(progressResponse.data);
+        }
+      } else {
+        // Load public content only when not authenticated
+        console.log('Loading public content for unauthenticated user...');
+        const [trendingResponse, allBooksResponse] = await Promise.all([
+          booksService.getTrendingBooks(),
+          booksService.getAllBooks()
+        ]);
+
+        console.log('Public data loaded:', {
+          trending: trendingResponse.success,
+          allBooks: allBooksResponse.success
+        });
+
+        // Process trending books
+        if (trendingResponse.success) {
+          setTrendingBooks(trendingResponse.data.slice(0, 10));
+        }
+
+        // Process community favorites (top rated books)
+        if (allBooksResponse.success) {
+          const topRated = allBooksResponse.data
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, 10);
+          setCommunityFavorites(topRated);
+        }
+
+        // Show mock continue reading data for unauthenticated users
+        setCurrentlyReading(mockContinueReadingData);
+      }
+    } catch (error) {
+      console.error('Error loading home data:', error);
+    } finally {
+      console.log('Setting servicesLoading to false');
+      setServicesLoading(false);
+    }
+  };
+
+  // Debug logging
+  console.log('Home Screen Debug:', { 
+    isLoading, 
+    servicesLoading, 
+    user: user?.displayName || 'No user',
+    trendingBooksCount: trendingBooks.length,
+    communityFavoritesCount: communityFavorites.length 
+  });
+
+  if (servicesLoading) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color={COLORS.primary[500]} />
-          <Text style={styles.loadingText}>Loading books...</Text>
+          <ActivityIndicator size="large" color="#EB4D2A" />
+          <Text style={styles.loadingText}>
+            Loading books... (isLoading: {isLoading ? 'true' : 'false'}, servicesLoading: {servicesLoading ? 'true' : 'false'})
+          </Text>
         </View>
       </SafeAreaView>
     );
@@ -303,13 +396,42 @@ export default function HomeScreen() {
           <TouchableOpacity style={styles.searchButton} onPress={() => router.push('/search')}>
             <SvgXml xml={SearchIcon} width={24} height={24} />
           </TouchableOpacity>
+          <TouchableOpacity 
+            onPress={() => setShowProfileMenu(!showProfileMenu)}
+          >
             <Image 
-            source={require('../src/assets/images/homepage/profile.jpg')} 
+              source={require('../src/assets/images/homepage/profile.jpg')} 
               style={styles.profileImage}
             />
+          </TouchableOpacity>
         </View>
       </View>
 
+      {/* Profile Dropdown Menu */}
+      {showProfileMenu && (
+        <View style={styles.profileMenuContainer}>
+          <View style={styles.profileMenu}>
+            <TouchableOpacity style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Followings</Text>
+              <Text style={styles.menuItemCount}>2.1K</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem}>
+              <Text style={styles.menuItemText}>Followers</Text>
+              <Text style={styles.menuItemCount}>234</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.menuItem}>
+              <Text style={styles.menuItemText}>My posts</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+              style={styles.menuItem}
+              onPress={() => router.push('/profile')}
+            >
+              <Text style={styles.menuItemText}>Settings</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+      
       <ScrollView 
         style={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
@@ -324,8 +446,8 @@ export default function HomeScreen() {
           style={styles.horizontalScroll}
           contentContainerStyle={styles.horizontalScrollContent}
         >
-          {homepageBooks.continueReading.map((book) => (
-            <ContinueReadingBookCard key={book.id} book={book} />
+          {currentlyReading.map((progress) => (
+            <ContinueReadingBookCard key={progress.id} progress={progress} />
           ))}
         </ScrollView>
 
@@ -338,7 +460,7 @@ export default function HomeScreen() {
           style={styles.horizontalScroll}
           contentContainerStyle={styles.horizontalScrollContent}
         >
-          {homepageBooks.trending.map((book) => (
+          {trendingBooks.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
         </ScrollView>
@@ -352,7 +474,7 @@ export default function HomeScreen() {
           style={styles.horizontalScroll}
           contentContainerStyle={styles.horizontalScrollContent}
         >
-          {homepageBooks.communityFavorites.map((book) => (
+          {communityFavorites.map((book) => (
             <BookCard key={book.id} book={book} />
           ))}
         </ScrollView>
@@ -690,6 +812,44 @@ const styles = StyleSheet.create({
     lineHeight: 28,
     letterSpacing: -0.4,
     marginTop: -15,
+  },
+  profileMenuContainer: {
+    position: 'absolute',
+    top: 120,
+    right: 20,
+    zIndex: 1000,
+  },
+  profileMenu: {
+    width: 244,
+    height: 195,
+    flexShrink: 0,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.22)',
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 64.815 },
+    shadowOpacity: 0.03,
+    shadowRadius: 46.852,
+    elevation: 10,
+    paddingVertical: 10,
+  },
+  menuItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+  },
+  menuItemText: {
+    fontSize: 16,
+    fontFamily: 'Inter',
+    color: '#000',
+  },
+  menuItemCount: {
+    fontSize: 16,
+    fontFamily: 'Inter',
+    color: '#999',
   },
 });
 
