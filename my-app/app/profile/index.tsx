@@ -221,7 +221,8 @@ export default function ProfileScreen() {
                     fontFamily: 'Inter',
                     fontWeight: '600',
                     color: 'white',
-                    marginBottom: 2,
+                    marginBottom: 0,
+                    lineHeight: 20,
                   }}>456</Text>
                   <Text style={styles.statLabel}>Books</Text>
                 </View>
@@ -239,7 +240,8 @@ export default function ProfileScreen() {
                     fontFamily: 'Inter',
                     fontWeight: '600',
                     color: 'white',
-                    marginBottom: 2,
+                    marginBottom: 0,
+                    lineHeight: 20,
                   }}>4.2K</Text>
                   <Text style={styles.statLabel}>Points</Text>
                 </View>
@@ -257,7 +259,8 @@ export default function ProfileScreen() {
                     fontFamily: 'Inter',
                     fontWeight: '600',
                     color: 'white',
-                    marginBottom: 2,
+                    marginBottom: 0,
+                    lineHeight: 20,
                   }}>8.9K</Text>
                   <Text style={styles.statLabel}>Followers</Text>
                 </View>
@@ -429,6 +432,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: 'Bogart-Regular-trial',
     color: 'rgba(255, 255, 255, 0.8)',
+    lineHeight: 14,
   },
   createAuthorWrapper: {
     position: 'absolute',
